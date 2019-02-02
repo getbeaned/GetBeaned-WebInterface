@@ -1,0 +1,10 @@
+markdown
+django-allauth
+gevent
+gunicorn
+netifaces
+psycopg2
+django-bootstrap4
+django-debug-toolbar
+django-crispy-forms
+django-cachalot

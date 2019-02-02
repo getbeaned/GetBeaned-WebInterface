@@ -1,0 +1,213 @@
+{% load static %}
+{% load socialaccount %}
+{% load cache %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="shortcut icon"
+          type="image/png"
+          href="{% static 'favicon.ico' %}"/>
+
+    <link rel="apple-touch-icon"
+          sizes="180x180"
+          href="{% static 'apple-touch-icon.png' %}">
+    <link rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="{% static 'favicon-32x32.png' %}">
+    <link rel="icon"
+          type="image/png"
+          sizes="192x192"
+          href="{% static 'android-chrome-192x192.png' %}">
+    <link rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="{% static 'favicon-16x16.png' %}">
+    <link rel="manifest"
+          href="{% static 'site.webmanifest' %}">
+    <link rel="mask-icon"
+          href="{% static 'safari-pinned-tab.svg' %}"
+          color="#5bbad5">
+    <meta name="msapplication-TileColor"
+          content="#da532c">
+    <meta name="msapplication-TileImage"
+          content="{% static 'mstile-144x144.png' %}">
+    <meta name="theme-color"
+          content="#ffffff">
+
+
+    <title>{% block title %}{% endblock %}</title>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+
+    <script src="{% static 'js/clipboard.js' %}"></script>
+
+    <link rel="stylesheet"
+          href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+          crossorigin="anonymous">
+
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+          crossorigin="anonymous">
+    {% comment %}
+    Dark theme beta
+    <link rel="stylesheet"
+          href="https://bootswatch.com/4/darkly/bootstrap.css">
+    {% endcomment %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+          type="text/css"
+          href="{% static 'css/base.css' %}">
+    {% if discord_logged_user and discord_logged_user.settings.dark_theme_enabled %}
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/dark.css' %}">
+        <!--<link rel="stylesheet alternate" type="text/css" href="{% static 'css/light.css' %}" title="Light Theme"/>-->
+
+    {% else %}
+        <link rel="stylesheet"
+              type="text/css"
+              href="{% static 'css/light.css' %}">
+        <link rel="stylesheet alternate"
+              type="text/css"
+              href="{% static 'css/dark.css' %}"
+              title="Dark Theme (beta)"/>
+    {% endif %}
+    {% block head %}
+    {% endblock %}
+</head>
+<body>
+{% cache 10 navbar request.user.username %}
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <!-- Navbar content -->
+        <a class="navbar-brand"
+           href="/">GetBeaned - A discord bot</a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse"
+             id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {# Logged in with social > #}
+                {% if discord_logged_user %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'web-user-details' user_id=discord_logged_user.discord_id %}">Your profile
+                                                                                                      ({{ user.username }})</a>
+                    </li>
+                    {% with owned_status=discord_logged_user.guilds_owned.all admin_status=discord_logged_user.admin_status.all moderator_status=discord_logged_user.moderator_status.all trusted_status=discord_logged_user.trusted_status.all %}
+                        {% if owned_status or admin_status or moderator_status or trusted_status %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle"
+                                   href="#"
+                                   id="navbarDropdown"
+                                   role="button"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true"
+                                   aria-expanded="false">
+                                    Your servers
+                                </a>
+                                <div class="dropdown-menu"
+                                     aria-labelledby="navbarDropdown">
+                                    {% if owned_status %}
+                                        {% for gs in owned_status %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'web-guild-details' guild_id=gs.discord_id %}">
+                                                {{ gs.discord_name }}</a>
+                                        {% endfor %}
+                                        <div class="dropdown-divider"></div>
+                                    {% endif %}
+                                    {% if admin_status %}
+                                        {% for gs in admin_status %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">
+                                                {{ gs.guild.discord_name }}</a>
+                                        {% endfor %}
+                                        <div class="dropdown-divider"></div>
+                                    {% endif %}
+                                    {% if moderator_status %}
+                                        {% for gs in moderator_status %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">
+                                                {{ gs.guild.discord_name }}</a>
+                                        {% endfor %}
+                                        <div class="dropdown-divider"></div>
+                                    {% endif %}
+                                    {% if trusted_status %}
+                                        {% for gs in trusted_status %}
+                                            <a class="dropdown-item"
+                                               href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">
+                                                {{ gs.guild.discord_name }}</a>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </li>
+                        {% endif %}
+                    {% endwith %}
+
+
+                    {# Not logged in with scoial > #}
+
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% provider_login_url "discord" %}">Login</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       href="https://discord.gg/cPbhK53">Support server</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       href="https://discordapp.com/oauth2/authorize?client_id=492797767916191745&permissions=201714887&scope=bot">
+                        Invite the bot</a>
+                </li>
+                {% if discord_logged_user %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="{% url 'account_logout' %}">Logout</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+{% endcache %}
+
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+        })
+    })
+</script>
+</body>
+</html>

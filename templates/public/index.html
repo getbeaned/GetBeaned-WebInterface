@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block title %}
+    GetBeaned — A mod bot for discord
+{% endblock %}
+
+{% block content %}
+    <h1>GetBeaned, a discord bot to moderate your discord servers</h1>
+
+    <p class="lead">
+        Currently storing {{ stats.actions_count }} actions, for {{ stats.users_count }} users
+        on {{ stats.guilds_count }} different servers.
+    Over all the servers overseen by the bot, {{ stats.automod_enabled_count }} have automod enabled ({{ stats.autotrigger_enabled_count }} with AutoTriggers) and
+    {{ stats.thresholds_enabled_count }} have thresholds enabled.
+
+
+    Convinced yet ?
+    <a href="https://discordapp.com/oauth2/authorize?client_id=492797767916191745&permissions=201714887&scope=bot">
+        Invite the bot</a> now!
+    </p>
+    <p class="lead">
+    Here is what it looks like with the latest actions recorded:
+    </p>
+        <div id="example_cards">
+            <div class="container-fluid">
+                <div class="row">
+                    {% for action in latest_actions %}
+                        <div class="col-xs-6 col-sm-6 col-md-3">
+                            {% show_card user action %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+{% endblock %}

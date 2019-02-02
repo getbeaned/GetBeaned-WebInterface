@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head %}
+    <meta property="og:title"
+          content="{{ d_user.discord_name }} profile"/>
+    <meta property="og:description"
+          content="{{ d_user }} profile"/>
+    <meta property="og:site_name"
+          content="GetBeaned"/>
+    <meta property="og:type"
+          content="profile"/>
+    <meta property="og:image"
+          content="{{ d_user.discord_avatar_url }}"/>
+    <meta property="og:image:alt"
+          content="{{ d_user.discord_name }} avatar"/>
+    <meta property="profile:username"
+          content="{{ d_user.discord_name }}"/>
+
+{% endblock %}
+
+{% block title %}
+    {{ d_user.discord_name }} profile on GetBeaned
+{% endblock %}
+
+{% block content %}
+    <h1>{{ d_user.discord_name }}#{{ d_user.discord_discriminator_str }} {% if d_user.discord_bot %}
+        <span class="badge badge-secondary">Bot <i class="fas fa-robot"></i></span>{% endif %}
+
+        {% if guild %}
+                                 log on
+            <a href="{% url 'web-guild-details' guild_id=guild.discord_id %}">{{ guild.discord_name }}</a>
+        {% else %}
+                                 global log
+        {% endif %}
+    </h1>
+
+
+
+    {% if d_user.admin_info %}
+        <div class="alert alert-primary"
+             role="alert">
+            <strong>Note from the bot admins:</strong><br/>
+            {{ d_user.admin_info|safe }}
+        </div>
+    {% endif %}
+
+    <table class="table">
+        <!--<thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">First</th>
+            <th scope="col">Last</th>
+            <th scope="col">Handle</th>
+        </tr>
+        </thead>-->
+        <tbody>
+        <tr>
+            <td>Discord ID:</td>
+            <td>{{ d_user.discord_id }} <i class="far fa-copy"
+                                           data-toggle="tooltip"
+                                           data-placement="auto"
+                                           title="Copy the ID to your clipboard"
+                                           onclick="copyTextToClipboard('{{ d_user.discord_id }}');
+
+                                                   $(this).attr('title', 'Copied!')
+                                                   .tooltip('_fixTitle')
+                                                   .tooltip('show')
+                                                   .attr('title', 'Copy the ID to your clipboard')
+                                                   .tooltip('_fixTitle');">
+            </i>
+
+
+            </td>
+        </tr>
+        <tr>
+            <td>Security score <i class="far fa-question-circle"
+                                  data-toggle="tooltip"
+                                  data-placement="auto"
+                                  title="Index of the 'badness' of a user based on the actions received and it's current status. The smaller the better, with 0 at best. This is not based on the user profile, meaning that the calculation doesn't depends on, ie, account age"></i>
+            </td>
+            <td>
+                {% with sec_score=d_user.security_score %}
+                    {{ sec_score }}
+                    {% if sec_score <= 0 %}
+                        <span class="badge badge-success">Best</span>
+                    {% elif sec_score <= 10 %}
+                        <span class="badge badge-success">Low</span>
+                    {% elif sec_score <= 20 %}
+                        <span class="badge badge-info">Moderate</span>
+                    {% elif sec_score <= 50 %}
+                        <span class="badge badge-warning">High</span>
+                    {% elif sec_score <= 90 %}
+                        <span class="badge badge-danger">Very high</span>
+                    {% else %}
+                        <span class="badge badge-danger">Extremely high</span>
+                    {% endif %}
+                    <br/>
+
+                {% endwith %}
+            </td>
+        </tr>
+        <tr>
+            <td>Total received actions</td>
+            <td>{{ actions_received|length }}</td>
+        </tr>
+        <tr>
+            <td>Total given actions</td>
+            <td>{{ actions_given|length }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    {% with owner_status=d_user.guilds_owned.all admin_status=d_user.admin_status.all mod_status=d_user.moderator_status.all trusted_status=d_user.trusted_status.all %}
+        {% if owner_status|length or admin_status|length or mod_status|length or trusted_status|length %}
+            <h2>Servers this user helps to moderate:</h2>
+            <ul>
+                {% if owner_status|length %}
+                    <li>Owner status : {% for gs in owner_status %}
+                        <a href="{% url 'web-guild-details' guild_id=gs.discord_id %}">{{ gs.discord_name }}</a> {% endfor %}
+                    </li>
+                {% endif %}
+                {% if admin_status|length %}
+                    <li>Admin status : {% for gs in admin_status %}
+                        <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
+                    </li>
+                {% endif %}
+                {% if mod_status|length %}
+                    <li>Moderator status : {% for gs in mod_status %}
+                        <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
+                    </li>
+                {% endif %}
+                {% if trusted_status|length %}
+                    <li>Trusted status : {% for gs in trusted_status %}
+                        <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+
+    {% if user.is_staff %}
+        <a href="{{ d_user.admin_url }}">Edit this discord user on the admin interface</a><br/>
+    {% endif %}
+
+    <h2 id="ar">Actions recorded on this user:</h2>
+    {% if actions_received %}
+
+
+        <div class="container-fluid">
+            <div class="row">
+                {% for action in actions_received %}
+                    <div class="col-xs-8 col-sm-6 col-md-3">
+                        {% show_card user action %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if actions_received.has_other_pages %}
+            <ul class="pagination">
+                {% if actions_received.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page_ar=1#ar">First</a>
+                    </li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page_ar={{ actions_received.previous_page_number }}#ar">{{ actions_received.previous_page_number }}</a>
+                    </li>
+
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link"
+                       href="#ar">{{ actions_received.number }}<span class="sr-only">(current)</span></a>
+                </li>
+
+
+                {% if actions_received.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page_ar={{ actions_received.next_page_number }}#ar">{{ actions_received.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page_ar={{ actions_received.paginator.num_pages }}#ar">Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+    {% else %}
+        No actions were recorded on this user<br/>
+    {% endif %}
+
+    <h2 id="ag">Actions created by this user:</h2>
+    {% if actions_given %}
+
+        <div class="container-fluid">
+            <div class="row">
+                {% for action in actions_given %}
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        {% show_card user action %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if actions_given.has_other_pages %}
+            <ul class="pagination">
+                {% if actions_given.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page_ag=1#ag">First</a>
+                    </li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page_ag={{ actions_given.previous_page_number }}#ag">{{ actions_given.previous_page_number }}</a>
+                    </li>
+
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link"
+                       href="#ag">{{ actions_given.number }}<span class="sr-only">(current)</span></a>
+                </li>
+
+
+                {% if actions_given.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page_ag={{ actions_given.next_page_number }}#ag">{{ actions_given.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page_ag={{ actions_given.paginator.num_pages }}#ag">Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+    {% else %}
+        No actions were given by this user<br/>
+    {% endif %}
+
+    <br/>
+
+    {% if guild %}
+        <h2>Global log information</h2>
+        This is a guild specific log for user {{ d_user.discord_name }}#{{ d_user.discord_discriminator_str }}. You can
+        see a
+        more global log <a href="{% url "web-user-details" user_id=d_user.discord_id %}">here</a>
+        <br/>
+    {% endif %}
+
+
+
+{% endblock %}

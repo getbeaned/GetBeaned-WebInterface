@@ -1,0 +1,10 @@
+from webinterface.models import DiscordUser, DiscordGuild
+
+
+def user_processor(request):
+    if request.user.is_authenticated:
+        discord_logged_user = DiscordUser.objects.filter(discord_id=request.user.socialaccount_set.first().uid).first()
+    else:
+        discord_logged_user = None
+
+    return {'discord_logged_user': discord_logged_user}

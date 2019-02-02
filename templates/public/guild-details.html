@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load tags %}
+
+{% block head %}
+    <meta property="og:title"
+          content="{{ guild.discord_name }}"/>
+    <meta property="og:description"
+          content="Overview of the actions given on {{ guild.discord_name }}"/>
+    <meta property="og:site_name"
+          content="GetBeaned"/>
+    <meta property="og:type"
+          content="article"/>
+    <meta property="og:image"
+          content="{{ guild.discord_icon_url }}"/>
+    <meta property="og:image:alt"
+          content="Icon URL of the guild"/>
+    <meta property="article:modified_time"
+          content="{{ guild.actions.last.timestamp }}"/>
+    <meta property="article:author"
+          content="{{ guild.owner.discord_name }}"/>
+    <meta property="article:tag"
+          content="guild"/>
+{% endblock %}
+
+{% block title %}
+    {{ guild.discord_name }} on GetBeaned
+{% endblock %}
+
+{% block content %}
+    {% if user|can_edit:guild %}
+        <h2>Server settings</h2>
+        You can edit your server settings by clicking on
+        <a href="{% url 'web-guild-edit-details' guild_id=guild.discord_id %}">this link</a>
+        <br>
+
+    {% endif %}
+
+    {% if user.is_staff %}
+        <h2>Admin</h2>
+        <a href="{{ guild.admin_url }}">Edit this discord guild on the admin interface here</a> and
+        <a href="{{ guild.settings.admin_url }}">this guild settings here</a>
+    {% endif %}
+
+    <h2>Actions recorded on this server</h2>
+    {% if actions %}
+        Actions recorded as of now:
+
+        <div class="container-fluid">
+            <div class="row">
+                {% for action in actions %}
+                    <div class="col-xs-8 col-sm-6 col-md-3">
+                        {% show_card user action %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% if actions.has_other_pages %}
+            <ul class="pagination">
+                {% if actions.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page=1">First</a>
+                    </li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ actions.previous_page_number }}">{{ actions.previous_page_number }}</a>
+                    </li>
+
+                {% endif %}
+
+                <li class="page-item active">
+                    <a class="page-link"
+                       href="#">{{ actions.number }}<span class="sr-only">(current)</span></a>
+                </li>
+
+
+                {% if actions.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ actions.next_page_number }}">{{ actions.next_page_number }}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ actions.paginator.num_pages }}">Last</a>
+                    </li>
+                {% endif %}
+            </ul>
+        {% endif %}
+    {% else %}
+        No actions were recorded on this guild... Yet!<br/>
+    {% endif %}
+
+
+{% endblock %}

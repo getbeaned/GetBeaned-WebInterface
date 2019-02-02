@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% load crispy_forms_tags %}
+{% block head %}
+    <meta property="og:title"
+          content="{{ guild.discord_name }}"/>
+    <meta property="og:description"
+          content="Editing {{ guild.discord_name }} settings"/>
+    <meta property="og:site_name"
+          content="GetBeaned"/>
+    <meta property="og:type"
+          content="article"/>
+    <meta property="og:image"
+          content="{{ guild.discord_icon_url }}"/>
+    <meta property="og:image:alt"
+          content="Icon URL of the guild"/>
+    <meta property="article:author"
+          content="{{ guild.owner.discord_name }}"/>
+    <meta property="article:tag"
+          content="guild"/>
+{% endblock %}
+
+{% block title %}
+    {{ guild.discord_name }} on GetBeaned
+{% endblock %}
+
+{% block content %}
+    <h1>{{ guild.discord_name|title }} settings</h1>
+    <h2>Server settings editor</h2>
+    {% crispy form %}
+{% endblock %}

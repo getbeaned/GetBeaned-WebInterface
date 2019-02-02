@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load tags %}
+{% block head %}
+    <meta property="og:title"
+          content="{{ action.action_type|title }} #{{ action.id }} - {{ action.user.discord_name }}"/>
+    <meta property="og:description"
+          content="{{ action.reason }}"/>
+    <meta property="og:site_name"
+          content="GetBeaned"/>
+    <meta property="og:type"
+          content="article"/>
+    <meta property="og:image"
+          content="{{ action.user.discord_avatar_url }}"/>
+    <meta property="og:image:alt"
+          content="Avartar url of the so called victim"/>
+    <meta property="article:published_time"
+          content="{{ action.timestamp }}"/>
+    <meta property="article:author"
+          content="{{ action.responsible_moderator.discord_name }}"/>
+    <meta property="article:tag"
+          content="{{ action.action_type }}"/>
+{% endblock %}
+
+{% block title %}
+    {{ action.action_type|title }} #{{ action.id }} - {{ action.user.discord_name }}
+{% endblock %}
+
+{% block content %}
+
+    {% show_card user action show_details_button=False %}
+
+
+    {% if action.attachment %}
+        Attachments : <a href="{{ action.attachment }}">1</a>
+    {% endif %}
+
+    {% if action.automod_logs %}
+        <strong>Automod logs: </strong>
+        <pre>{{ action.automod_logs|linebreaksbr }}</pre>
+
+    {% endif %}
+
+
+{% endblock %}

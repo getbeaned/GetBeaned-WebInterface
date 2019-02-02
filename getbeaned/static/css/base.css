@@ -1,0 +1,45 @@
+.asteriskField {
+    display: none;
+}
+
+
+#example {
+    padding-top: 1em;
+}
+
+#example_cards {
+    padding-top: 2em;
+    border-radius: .2em;
+}
+
+#content {
+    padding-top: 1em;
+    padding-right: 2em;
+    padding-left: 2em;
+
+}
+
+.action-text-unban {
+    font-weight: bold;
+}
+
+.action-text-note {
+    font-weight: bold;
+}
+
+.action-text-warn {
+    font-weight: bold;
+}
+
+.action-text-kick {
+    font-weight: bold;
+}
+
+.action-text-softban {
+    font-weight: bold;
+}
+
+.action-text-ban {
+    font-weight: bold;
+}
+

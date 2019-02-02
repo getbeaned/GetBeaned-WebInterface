@@ -1,0 +1,59 @@
+
+body {
+    background-color: #36393F;
+    color: #cdcdcd;
+}
+
+.lead, h1{
+    color: #c5c5c5;
+}
+
+#example_cards {
+    border: 2px solid #444444;
+}
+
+.border {
+    border: 2px solid #444444 !important;
+}
+
+.btn-outline-secondary {
+    color: #c5c5c5;
+}
+
+.bg-dark {
+    background-color: #434c52 !important;
+}
+
+pre {
+    color: #c5c5c5;
+}
+
+.action-text-unban {
+    color: green;
+}
+
+.action-text-note {
+    color: grey;
+}
+
+.action-text-warn {
+    color: orange;
+}
+
+.action-text-kick {
+    color: orangered;
+}
+
+.action-text-softban {
+    color: red;
+}
+
+.action-text-ban {
+    color: #A92F41;
+}
+
+.alert-primary {
+    color: #cce5ff;
+    background-color: #143750;
+    border-color: #004085;
+}

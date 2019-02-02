@@ -1,0 +1,57 @@
+<div class="border rounded mx-auto"
+     style="max-width: {% if show_details_button %}17{% else %}20{% endif %}rem; margin-bottom:1rem;">
+    <a href="{% url 'web-user-details' guild_id=action.guild.discord_id user_id=action.user.discord_id %}">
+        <img class="card-img-top"
+             src="{{ action.user.discord_avatar_url }}"
+             data-altSrc="{{ action.user.discord_default_avatar_url }}"
+             onerror="this.src = $(this).attr('data-altSrc')"
+             alt="">
+    </a>
+    <div class="card-body">
+        <h5 class="card-title"><span class="action-text-{{ action.action_type }}">{{ action.action_type|title }}</span>
+            #{{ action.id }} </h5>
+        <h6 class="card-subtitle mb-2 text-muted">On <a
+                href="{% url 'web-user-details' guild_id=action.guild.discord_id user_id=action.user.discord_id %}">{{ action.user.discord_name }}
+            {% if action.user.discord_bot %}<span class="badge badge-secondary">Bot</span>{% endif %}</a>
+            {% if action.attachment %}
+                <span class="badge badge-secondary"><i class="fas fa-paperclip"></i></span>{% endif %}
+        </h6>
+        {% if edit_form %}
+            <div class="form-group">
+                <label for="id_reason"><strong>Reason:</strong></label><br/>
+                {{ edit_form.reason }}
+            </div>
+        {% else %}
+            <p class="card-text"><strong>Reason:</strong> {{ action.formatted_reason }}
+
+            {% if user.socialaccount_set.all.0.uid == action.responsible_moderator.discord_id|stringformat:"i" or user.socialaccount_set.all.0.uid == action.guild.owner.discord_id|stringformat:"i" %}
+                -
+                <a href="{% url 'web-action-edit-details' action_id=action.id %}"><i class="far fa-edit"></i></a>
+            {% endif %}
+            <br>
+        {% endif %}
+        <strong>Moderator: </strong><a
+            href="{% url 'web-user-details' guild_id=action.guild.discord_id user_id=action.responsible_moderator.discord_id %}">{{ action.responsible_moderator.discord_name }}
+        {% if action.responsible_moderator.discord_bot %}
+            <span class="badge badge-secondary">Bot</span>{% endif %}</a>
+        <br><strong>Server: </strong><a
+            href="{% url 'web-guild-details' guild_id=action.guild.discord_id %}">{{ action.guild.discord_name }}</a>
+        </p>
+
+        {% if show_details_button %}
+            <div class="text-center"><a href="{% url 'web-action-details' action_id=action.id %}"
+                                        class="btn btn-outline-secondary"
+                                        style="margin-bottom: 10px">Details</a>
+            </div>
+        {% endif %}
+
+        <div class="card-footer text-muted">
+            {{ action.timestamp }}
+
+            {% if user.is_staff %}
+                <br/><a href="{{ action.admin_url }}">Edit this in the admin panel</a>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
