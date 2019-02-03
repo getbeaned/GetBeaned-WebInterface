@@ -14,8 +14,7 @@ import os
 import netifaces
 import json
 
-with open("credentials.json", "r") as f:
-    credentials = json.load(f)
+
 
 
 # Find out what the IP addresses are at run time
@@ -35,6 +34,8 @@ def ip_addresses():
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+with open(BASE_DIR + "/credentials.json", "r") as f:
+    credentials = json.load(f)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
