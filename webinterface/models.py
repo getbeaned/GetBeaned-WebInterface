@@ -287,6 +287,10 @@ class GuildSettings(models.Model):
         verbose_name="number of warns that must be applied to a user before they receive an automatic kick",
         default=3)
 
+    thresholds_mutes_to_kick = models.IntegerField(
+        verbose_name="number of mutes that must be applied to a user before they receive an automatic kick",
+        default=2)
+
     thresholds_kicks_to_bans = models.IntegerField(
         verbose_name="number of kicks that must be applied to a user before they receive an automatic ban",
         default=3)
