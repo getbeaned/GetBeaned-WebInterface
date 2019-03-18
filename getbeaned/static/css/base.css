@@ -19,6 +19,10 @@
 
 }
 
+.action-text-unmute {
+    font-weight: bold;
+}
+
 .action-text-unban {
     font-weight: bold;
 }
@@ -28,6 +32,10 @@
 }
 
 .action-text-warn {
+    font-weight: bold;
+}
+
+.action-text-mute {
     font-weight: bold;
 }
 

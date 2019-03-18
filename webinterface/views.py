@@ -55,7 +55,8 @@ def web_index(request):
         "thresholds_enabled_count": GuildSettings.objects.filter(thresholds_enable=True).count(),
     }
 
-    latest_actions = Action.objects.order_by('-id')[:4]
+    # latest_actions = Action.objects.order_by('-id')[:4]
+    latest_actions = [Action.objects.latest(field_name="id"), Action.objects.get(id=1319), Action.objects.get(id=1286), Action.objects.get(id=1143)]
 
     return render(request, 'public/index.html', {"stats": stats, "latest_actions": latest_actions})
 

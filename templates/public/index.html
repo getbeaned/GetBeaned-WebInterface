@@ -7,29 +7,179 @@
 {% block content %}
     <h1>GetBeaned, a discord bot to moderate your discord servers</h1>
 
-    <p class="lead">
-        Currently storing {{ stats.actions_count }} actions, for {{ stats.users_count }} users
-        on {{ stats.guilds_count }} different servers.
-    Over all the servers overseen by the bot, {{ stats.automod_enabled_count }} have automod enabled ({{ stats.autotrigger_enabled_count }} with AutoTriggers) and
-    {{ stats.thresholds_enabled_count }} have thresholds enabled.
+    GetBeaned is the only bot you'll ever need to moderate your server. Why ? The primary feature is the <strong>AutoModerator</strong>. But wait, it's not like the Dyno or MEE6
+    automod, it's
+    way more advanced and got less false-positives.
 
+    <div class="accordion"
+         id="features">
+        <div class="card">
+            <div class="card-header"
+                 id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseOne"
+                            aria-expanded="true"
+                            aria-controls="collapseOne">
+                        How does it work ?
+                    </button>
+                </h5>
+            </div>
 
-    Convinced yet ?
-    <a href="https://discordapp.com/oauth2/authorize?client_id=492797767916191745&permissions=201714887&scope=bot">
-        Invite the bot</a> now!
-    </p>
-    <p class="lead">
-    Here is what it looks like with the latest actions recorded:
-    </p>
-        <div id="example_cards">
-            <div class="container-fluid">
-                <div class="row">
-                    {% for action in latest_actions %}
-                        <div class="col-xs-6 col-sm-6 col-md-3">
-                            {% show_card user action %}
-                        </div>
-                    {% endfor %}
+            <div id="collapseOne"
+                 class="collapse show"
+                 aria-labelledby="headingOne"
+                 data-parent="#features">
+                <div class="card-body">
+                    The automoderator works by calculating a multiplicator, that represent how likely a user is there to spam. Using multiple data points, such as the Discord Nitro
+                    status of the
+                    user, the account age and how long ago the user joined, GetBeaned is able to have a pretty good estimate of the spam-potential of an user
+
+                    After calculating the multiplicator, GetBeaned will then look at the specific message to determine if it could be considered as spam, using factors such as the
+                    presence of
+                    CAPS, swear words, failed @everyone pings, ...
+
+                    Finally, by multiplying the multiplicator and the message score, GetBeaned apply actions corresponding to a specific total score.
                 </div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-header"
+                 id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseTwo"
+                            aria-expanded="false"
+                            aria-controls="collapseTwo">
+                        What does that mean in practice?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo"
+                 class="collapse"
+                 aria-labelledby="headingTwo"
+                 data-parent="#features">
+                <div class="card-body">
+                    Have you ever been on a server, and when trying to send a message quickly after another one, or just with a few CAPS letters, only to see it get removed by a
+                    too strict
+                    moderation bot, while, at the same time in another channel, a user is spamming mentions without getting banned ? Well, if you don't want that to happen on your
+                    server,
+                    <strong>GetBeaned is the solution!</strong>
+
+                    A user that just joined and that try to post invite links should be treated as a spammer while a trusted user that has been there for a year shouldn't. And
+                    that's what the
+                    GetBeaned AutoModerator does.
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"
+                 id="headingThree">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseThree"
+                            aria-expanded="false"
+                            aria-controls="collapseThree">
+                        Configuration
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseThree"
+                 class="collapse"
+                 aria-labelledby="headingThree"
+                 data-parent="#features">
+                <div class="card-body">
+                    You can configure GetBeaned on the webinterface, by logging in with discord. However, the defaults provided are quite good, and just enabling
+                    Thresholds and automod should get you started!
+
+                    But, if you need, more than 60 configuration variables are available, so customising the bot shouldn't be a problem
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"
+                 id="headingFour">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseFour"
+                            aria-expanded="false"
+                            aria-controls="collapseFour">
+                        Other features include
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseFour"
+                 class="collapse"
+                 aria-labelledby="headingFour"
+                 data-parent="#features">
+                <div class="card-body">
+                    <ul>
+                        <li>Standard moderation commands (unban, note, warn, kick, softban, ban), that accept multiple users and reasons at the same time</li>
+                        <li>Thresholds (if a user get X warns, he'll be automatically kicked, ...)</li>
+                        <li>A custom purge messages command to remove off-topic bot commands for channels</li>
+                        <li>No "fun", "games", "leveling" or spammy features. GetBeaned only does moderation, but it do it well!</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header"
+                 id="headingFive">
+                <h5 class="mb-0">
+                    <button class="btn btn-link collapsed"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#collapseFive"
+                            aria-expanded="false"
+                            aria-controls="collapseFive">
+                        In need of support?
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseFive"
+                 class="collapse"
+                 aria-labelledby="headingFive"
+                 data-parent="#features">
+                <div class="card-body">
+                    Not a problem, we are here to help on the <a href="https://discordapp.com/invite/cPbhK53">support server</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    
+    <p class="lead">
+        Currently storing {{ stats.actions_count }} actions, for {{ stats.users_count }} users
+        on {{ stats.guilds_count }} different servers.
+        Over all the servers overseen by the bot, {{ stats.automod_enabled_count }} have automod enabled ({{ stats.autotrigger_enabled_count }} with AutoTriggers) and
+        {{ stats.thresholds_enabled_count }} have thresholds enabled.
+
+
+        Convinced yet ?
+        <a href="https://discordapp.com/oauth2/authorize?client_id=492797767916191745&permissions=201714887&scope=bot">
+            Invite the bot</a> now!
+    </p>
+
+    <p class="lead">
+        Here is what it looks like with the latest actions recorded:
+    </p>
+    <div id="example_cards">
+        <div class="container-fluid">
+            <div class="row">
+                {% for action in latest_actions %}
+                    <div class="col-xs-6 col-sm-6 col-md-3">
+                        {% show_card user action %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

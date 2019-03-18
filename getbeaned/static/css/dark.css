@@ -28,6 +28,10 @@ pre {
     color: #c5c5c5;
 }
 
+.action-text-unmute {
+    color: darkgreen;
+}
+
 .action-text-unban {
     color: green;
 }
@@ -38,6 +42,10 @@ pre {
 
 .action-text-warn {
     color: orange;
+}
+
+.action-text-mute {
+    color: mediumpurple;
 }
 
 .action-text-kick {
@@ -56,4 +64,16 @@ pre {
     color: #cce5ff;
     background-color: #143750;
     border-color: #004085;
+}
+
+.card-body {
+    background-color: #36393F;
+}
+
+.card-header {
+    background-color: rgba(0, 0, 0, 0.83);
+}
+
+.accordion {
+    border: #434c52;
 }
