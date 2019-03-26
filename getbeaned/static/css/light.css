@@ -11,35 +11,4 @@ body {
     border: 1px solid #cccccc;
 }
 
-.action-text-unban {
-    color: green;
-}
-
-.action-text-unmute {
-    color: darkgreen;
-}
-
-.action-text-note {
-    color: grey;
-}
-
-.action-text-warn {
-    color: orange;
-}
-
-.action-text-kick {
-    color: orangered;
-}
-
-.action-text-mute {
-    color: rebeccapurple;
-}
-
-.action-text-softban {
-    color: red;
-}
-
-.action-text-ban {
-    color: darkred;
-}
 
