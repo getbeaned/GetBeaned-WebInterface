@@ -27,5 +27,6 @@
 {% block content %}
     <h1>{{ guild.discord_name|title }} settings</h1>
     <h2>Server settings editor</h2>
+    {{ form.errors }}
     {% crispy form %}
 {% endblock %}

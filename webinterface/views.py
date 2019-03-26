@@ -108,7 +108,7 @@ def web_guild_edit_details(request, guild_id: int):
     form.fields["permissions_moderators"].queryset = guild.settings.permissions_moderators.all()
     form.fields["permissions_trusted"].queryset = guild.settings.permissions_trusted.all()
     form.fields["permissions_banned"].queryset = guild.settings.permissions_banned.all()
-
+    #logger.warn(json.dumps(form.errors))
     return render(request, 'public/guild-edit-details.html', {'guild': guild, 'form': form})
 
 

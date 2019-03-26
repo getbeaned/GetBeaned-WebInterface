@@ -51,6 +51,7 @@ class WebSettingsForm(ModelForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-4'
         self.helper.field_class = 'col-lg-7'
+        #self.helper.error_text_inline = False
 
         self.helper.layout = Layout(
             TabHolder(
@@ -106,6 +107,7 @@ class WebSettingsForm(ModelForm):
                     ),
                 Tab('Thresholds',
                     *[Div(field_name) for field_name in ['thresholds_enable',
+                                                         'thresholds_mutes_to_kick',
                                                          'thresholds_warns_to_kick',
                                                          'thresholds_kicks_to_bans',
                                                          'thresholds_softbans_to_bans',
