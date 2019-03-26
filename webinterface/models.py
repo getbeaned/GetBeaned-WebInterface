@@ -50,7 +50,7 @@ class DiscordUser(models.Model):
             return self._settings
         except UserSettings.DoesNotExist:
             return UserSettings.objects.create(
-                guild=self,
+                user=self,
             )
 
     @property
@@ -148,7 +148,7 @@ class GuildSettings(models.Model):
     imported_bans = models.BooleanField(default=False)
 
     # AutoTrigger
-    autotrigger_enable = models.BooleanField(verbose_name="enable AutoTrigger", default=False)
+    autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)
 
     autotrigger_sexdatingdiscordbots_score = models.FloatField(
         verbose_name="message looks like a link spam for a \"Sex Dating\" scam website ",
