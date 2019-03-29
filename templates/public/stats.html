@@ -23,6 +23,12 @@
 {% block content %}
     <h1>GetBeaned Statistics</h1>
 
+    <style>
+    h2{
+       text-align: center;
+    }
+    </style>
+
     <script>
         Highcharts.setOptions({
             credits: {
@@ -39,30 +45,69 @@
         {{ general_stats.thresholds_enabled_count }} have thresholds enabled.
     </p>
 
-
-    <div id="graph_moderators_container"></div>
+    <h2>Servers and users</h2>
+        <div id="graph_servers_member_count">
+    </div>
 
     <script>
-        Highcharts.chart('graph_moderators_container', {
+        Highcharts.chart('graph_servers_member_count', {
+            chart: {
+                type: 'packedbubble',
+                height: '50%',
+                zoomType: 'xy'
+
+            },
             title: {
-                text: 'Proportion of human moderators actions saved'
+                text: 'Biggest servers using the bot'
             },
-
             subtitle: {
-                text: ''
+                text: 'Click on a server to go to it\'s page'
             },
-
+            tooltip: {
+                useHTML: true,
+                pointFormat: '<b>{point.name}:</b> {point.y} members'
+            },
+            plotOptions: {
+                packedbubble: {
+                    events: {
+                        click: function(e){
+                            window.location.href = '/guilds/' + e.point.guild_id + '#' + e.point.name;
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}',
+                        filter: {
+                            property: 'y',
+                            operator: '>',
+                            value: 1000
+                        },
+                        style: {
+                            color: 'black',
+                            textOutline: 'none',
+                            fontWeight: 'normal'
+                        },
+                    },
+                }
+            },
             series: [{
-                type: 'pie',
-                data: {{ graph_moderators_data|safe }}
-
-            }]
-
+                name: 'AutoMod enabled',
+                data: {{ graph_servers_member_count_data.automod|safe }},
+                color: "rgba(55,255,106,0.5)"
+            }, {
+                name: 'AutoMod disabled',
+                data: {{ graph_servers_member_count_data.notautomod|safe }},
+                color: "rgba(255,68,61,0.5)"
+            },
+            ]
         });
     </script>
 
+    <h2>Moderator actions</h2>
+
     <div id="graph_actions_time"></div>
     <div id="graph_actions_time_am"></div>
+    <div id="graph_moderators"></div>
     <script>
         Highcharts.chart('graph_actions_time', {
             chart: {
@@ -146,9 +191,7 @@
             }
             ]
         });
-    </script>
 
-    <script>
         Highcharts.chart('graph_actions_time_am', {
             chart: {
                 type: 'column'
@@ -211,64 +254,24 @@
             }
             ]
         });
-    </script>
 
-    <div id="graph_servers_member_count">
-    </div>
-
-    <script>
-        Highcharts.chart('graph_servers_member_count', {
-            chart: {
-                type: 'packedbubble',
-                height: '50%',
-                zoomType: 'xy'
-
-            },
+        Highcharts.chart('graph_moderators', {
             title: {
-                text: 'Biggest servers using the bot'
+                text: 'Proportion of human moderators actions saved'
             },
+
             subtitle: {
-                text: 'Click on a server to go to it\'s page'
+                text: ''
             },
-            tooltip: {
-                useHTML: true,
-                pointFormat: '<b>{point.name}:</b> {point.y} members'
-            },
-            plotOptions: {
-                packedbubble: {
-                    events: {
-                        click: function(e){
-                            window.location.href = '/guilds/' + e.point.guild_id + '#' + e.point.name;
-                        }
-                    },
-                    dataLabels: {
-                        enabled: true,
-                        format: '{point.name}',
-                        filter: {
-                            property: 'y',
-                            operator: '>',
-                            value: 1000
-                        },
-                        style: {
-                            color: 'black',
-                            textOutline: 'none',
-                            fontWeight: 'normal'
-                        },
-                    },
-                    minPointSize: 10
-                }
-            },
+
             series: [{
-                name: 'AutoMod enabled',
-                data: {{ graph_servers_member_count_data.automod|safe }},
-                color: "rgba(55,255,106,0.5)"
-            }, {
-                name: 'AutoMod disabled',
-                data: {{ graph_servers_member_count_data.notautomod|safe }},
-                color: "rgba(255,68,61,0.5)"
-            },
-            ]
+                type: 'pie',
+                data: {{ graph_moderators_data|safe }}
+
+            }]
+
         });
     </script>
+
 
 {% endblock %}
