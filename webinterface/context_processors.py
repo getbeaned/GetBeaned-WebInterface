@@ -7,4 +7,4 @@ def user_processor(request):
     else:
         discord_logged_user = None
 
-    return {'discord_logged_user': discord_logged_user}
+    return {'discord_logged_user': discord_logged_user, 'dark_themes': ["dark", "cyborg"]}

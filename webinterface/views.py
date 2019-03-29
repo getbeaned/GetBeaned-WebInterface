@@ -1,4 +1,6 @@
 import json
+
+import django.utils.html
 from django.core.paginator import Paginator
 
 from django.views.decorators.cache import cache_page
@@ -9,6 +11,9 @@ from django.http import JsonResponse, HttpResponseForbidden, HttpResponseRedirec
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.vary import vary_on_cookie
+
+from collections import defaultdict
+from django.db.models.functions import ExtractHour
 
 from webinterface.edition_controls import can_edit
 from webinterface.forms import DiscordUserForm, DiscordGuildForm, ActionForm, ActionEditForm, WebSettingsForm
@@ -61,6 +66,65 @@ def web_index(request):
     return render(request, 'public/index.html', {"stats": stats, "latest_actions": latest_actions})
 
 
+@cache_page(60 * 1)
+@vary_on_cookie
+def web_stats(request):
+    general_stats = {
+        "actions_count": Action.objects.count(),
+        "guilds_count": DiscordGuild.objects.count(),
+        "users_count": DiscordUser.objects.count(),
+        "automod_enabled_count": GuildSettings.objects.filter(automod_enable=True).count(),
+        "autotrigger_enabled_count": GuildSettings.objects.filter(autotrigger_enable=True).count(),
+        "thresholds_enabled_count": GuildSettings.objects.filter(thresholds_enable=True).count(),
+    }
+
+    automod = Action.objects.filter(responsible_moderator__discord_id__exact=1).count()
+    normalmod = Action.objects.filter(responsible_moderator__discord_id__gt=999).count()
+
+    graph_moderators_data = json.dumps(
+        [
+            {"name": "AutoModerator", "y": automod},
+            {"name": "Human Moderators", "y": normalmod}
+        ]
+    )
+
+    # create a new field to extract hour from timestamp field
+    actions = Action.objects.select_related('responsible_moderator').only('action_type', 'responsible_moderator__discord_id').annotate(hour=ExtractHour('timestamp')).order_by().all()
+
+    # create a default dict to insert a list if key is not exist
+    graph_actions_time_y = list(range(0, 24))
+
+    graph_actions_time_x = defaultdict(lambda: [0] * 24)
+    graph_actions_time_am_x = defaultdict(lambda: [0] * 24)
+
+    for row in actions:
+        if int(row.responsible_moderator.discord_id) > 999:
+            graph_actions_time_x[row.action_type][row.hour] += 1
+        elif int(row.responsible_moderator.discord_id) == 1:
+            graph_actions_time_am_x[row.action_type][row.hour] += 1
+
+    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').all()
+
+    graph_servers_member_count_data = {"automod": [], "notautomod": []}
+
+    for g in guilds:
+        p = {'name': django.utils.html.escape(g.discord_name), 'value': g.discord_user_count, 'guild_id': str(g.discord_id)}
+        if g.settings.automod_enable:
+            graph_servers_member_count_data["automod"].append(p)
+        else:
+            graph_servers_member_count_data["notautomod"].append(p)
+
+    graph_servers_member_count_data["automod"] = json.dumps(graph_servers_member_count_data["automod"])
+    graph_servers_member_count_data["notautomod"] = json.dumps(graph_servers_member_count_data["notautomod"])
+
+    return render(request, 'public/stats.html', {"general_stats": general_stats,
+                                                 "graph_moderators_data": graph_moderators_data,
+                                                 "graph_actions_time_y": graph_actions_time_y,
+                                                 "graph_actions_time_x": graph_actions_time_x,
+                                                 "graph_actions_time_am_x": graph_actions_time_am_x,
+                                                 "graph_servers_member_count_data": graph_servers_member_count_data})
+
+
 @api_login_required
 @csrf_exempt
 def api_index(request):
@@ -108,7 +172,7 @@ def web_guild_edit_details(request, guild_id: int):
     form.fields["permissions_moderators"].queryset = guild.settings.permissions_moderators.all()
     form.fields["permissions_trusted"].queryset = guild.settings.permissions_trusted.all()
     form.fields["permissions_banned"].queryset = guild.settings.permissions_banned.all()
-    #logger.warn(json.dumps(form.errors))
+    # logger.warn(json.dumps(form.errors))
     return render(request, 'public/guild-edit-details.html', {'guild': guild, 'form': form})
 
 
@@ -116,7 +180,6 @@ def web_guild_edit_details(request, guild_id: int):
 @csrf_exempt
 def api_guilds(request):
     if request.method == 'POST':
-
         form = DiscordGuildForm(request.POST)
 
         if form.is_valid():

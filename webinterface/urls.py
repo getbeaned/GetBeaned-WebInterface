@@ -9,6 +9,8 @@ from . import views
 
 urlpatterns = [
     path('',    views.web_index, name='web-index'),
+    path('stats',    views.web_stats, name='web-stats'),
+
 
     path('api', views.api_index, name='api-index'),
 
