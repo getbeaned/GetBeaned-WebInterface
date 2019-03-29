@@ -103,7 +103,7 @@ def web_stats(request):
         elif int(row.responsible_moderator.discord_id) == 1:
             graph_actions_time_am_x[row.action_type][row.hour] += 1
 
-    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').all()
+    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').filter(discord_user_count__gt=15).all()
 
     graph_servers_member_count_data = {"automod": [], "notautomod": []}
 

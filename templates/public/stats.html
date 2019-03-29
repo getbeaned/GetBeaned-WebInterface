@@ -45,6 +45,10 @@
         {{ general_stats.thresholds_enabled_count }} have thresholds enabled.
     </p>
 
+    <div class="alert alert-info" role="alert">
+        The graphs you see on this page are <strong>interactive</strong>. For example, you can click on any legend element to show/hide it from the data displayed.
+    </div>
+
     <h2>Servers and users</h2>
         <div id="graph_servers_member_count">
     </div>
@@ -61,7 +65,7 @@
                 text: 'Biggest servers using the bot'
             },
             subtitle: {
-                text: 'Click on a server to go to it\'s page'
+                text: 'Click on a server to go to it\'s page. Your server needs at least 15 members to appear here'
             },
             tooltip: {
                 useHTML: true,
