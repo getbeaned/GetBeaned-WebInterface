@@ -60,7 +60,7 @@ class DiscordUser(models.Model):
         :return:
         """
 
-        def member_count_softner(x):
+        def member_count_softener(x):
             """
             This function will take the member count of a server and dampen it to fit on a way smaller scale, but a non-linear one
 
@@ -94,8 +94,8 @@ class DiscordUser(models.Model):
                     if action_mapping[cwt] <= action_mapping[action.action_type]:
                         worst_type[action.guild] = action.action_type
 
-        bans_index = sum([member_count_softner(g.discord_user_count) * 15 for g in banned_in])
-        actions_index = sum([member_count_softner(g.discord_user_count) * action_mapping[worst_type] for g, worst_type in worst_type.items()])
+        bans_index = sum([member_count_softener(g.discord_user_count) * 15 for g in banned_in])
+        actions_index = sum([member_count_softener(g.discord_user_count) * action_mapping[worst_type] for g, worst_type in worst_type.items()])
 
         index = round(bans_index + actions_index, 2)
 
