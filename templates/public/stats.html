@@ -14,6 +14,7 @@
     <script src="{% static 'js/highcharts/modules/full-screen.js' %}"></script>
     <script src="{% static 'js/highcharts/modules/funnel.js' %}"></script>
     <script src="{% static 'js/highcharts/modules/draggable-points.js' %}"></script>
+    <script src="{% static 'js/highcharts/modules/highcharts-regression.js' %}"></script>
 
     {% if discord_logged_user and discord_logged_user.settings.theme in dark_themes %}
         <script src="{% static 'js/highcharts/dark-unica.js' %}"></script>
@@ -24,9 +25,9 @@
     <h1>GetBeaned Statistics</h1>
 
     <style>
-    h2{
-       text-align: center;
-    }
+        h2 {
+            text-align: center;
+        }
     </style>
 
     <script>
@@ -45,19 +46,98 @@
         {{ general_stats.thresholds_enabled_count }} have thresholds enabled.
     </p>
 
-    <div class="alert alert-info" role="alert">
+    <div class="alert alert-info"
+         role="alert">
         The graphs you see on this page are <strong>interactive</strong>. For example, you can click on any legend element to show/hide it from the data displayed.
     </div>
 
     <h2>Servers and users</h2>
-        <div id="graph_servers_member_count">
-    </div>
+    <div id="graph_servers_member_count" style="min-height: 300px; height: 75vh"></div>
+    <div id="graph_servers_member_vs_actions"></div>
+
 
     <script>
+        Highcharts.chart('graph_servers_member_vs_actions', {
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Member count of guilds compared to actions count'
+            },
+            xAxis: {
+                type: 'logarithmic',
+                minorTickInterval: 0.1,
+
+                title: {
+                    enabled: true,
+                    text: 'Member count'
+                },
+                showLastLabel: true
+            },
+            yAxis: {
+                type: 'logarithmic',
+                minorTickInterval: 0.2,
+                min: 1,
+                title: {
+                    text: 'Actions'
+                },
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    events: {
+                        click: function (e) {
+                            window.location.href = '/guilds/' + e.point.guild_id + '#' + e.point.name;
+                        }
+                    },
+                    //regression:true,
+                    marker: {
+                        radius: 5,
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: 'rgb(100,100,100)'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{series.name}</b><br>',
+                        pointFormat: '{point.name}: {point.x} members, {point.y} actions'
+                    }
+                }
+            },
+            series: [{
+                name: 'AutoMod enabled',
+                color: "rgba(55,255,106,0.5)",
+                data: {{ graph_servers_member_vs_actions_data.automod|safe }}
+
+            }, {
+                name: 'AutoMod disabled',
+                color: "rgba(255,68,61,0.5)",
+                data: {{ graph_servers_member_vs_actions_data.notautomod|safe }}
+            }]
+        });
+
         Highcharts.chart('graph_servers_member_count', {
             chart: {
                 type: 'packedbubble',
-                height: '50%',
                 zoomType: 'xy'
 
             },
@@ -74,7 +154,7 @@
             plotOptions: {
                 packedbubble: {
                     events: {
-                        click: function(e){
+                        click: function (e) {
                             window.location.href = '/guilds/' + e.point.guild_id + '#' + e.point.name;
                         }
                     },
