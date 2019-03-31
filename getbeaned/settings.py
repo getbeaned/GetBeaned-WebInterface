@@ -69,7 +69,8 @@ INSTALLED_APPS = [
     'bootstrap4',
     'debug_toolbar',
     'crispy_forms',
-    'cachalot'
+    'cachalot',
+    'analytical'
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_ID = 3
@@ -265,3 +266,6 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'getbeaned.settings.show_toolbar',
     # Rest of config
 }
+
+GOOGLE_ANALYTICS_JS_PROPERTY_ID = "UA-137341103-1"
+GOOGLE_ANALYTICS_DISPLAY_ADVERTISING = True

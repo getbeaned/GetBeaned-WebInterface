@@ -78,8 +78,7 @@ def web_stats(request):
                 'mute': 'rebeccapurple',
                 'kick': 'orangered',
                 'softban': 'red',
-                'ban': 'darkred'
-
+                'ban': 'darkred',
             }
     general_stats = {
         "actions_count": Action.objects.count(),
@@ -115,6 +114,7 @@ def web_stats(request):
         if int(row.responsible_moderator.discord_id) > 999:
             graph_actions_time_x[row.action_type][row.hour] += 1
             graph_actions[row.action_type] += 1
+
         elif int(row.responsible_moderator.discord_id) == 1:
             graph_actions_time_am_x[row.action_type][row.hour] += 1
 

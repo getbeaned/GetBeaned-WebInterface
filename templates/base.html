@@ -1,9 +1,11 @@
 {% load static %}
 {% load socialaccount %}
 {% load cache %}
+{% load analytical %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% analytical_head_top %}
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -84,8 +86,10 @@
 
     {% block head %}
     {% endblock %}
+    {% analytical_head_bottom %}
 </head>
 <body>
+{% analytical_body_top %}
 {% cache 10 navbar request.user.username %}
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <!-- Navbar content -->
@@ -204,5 +208,6 @@
         $('[data-toggle="tooltip"]').tooltip({})
     })
 </script>
+{% analytical_body_bottom %}
 </body>
 </html>
