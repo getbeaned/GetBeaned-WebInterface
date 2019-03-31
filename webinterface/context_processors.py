@@ -14,6 +14,6 @@ def user_processor(request):
 
 def event_processor(request):
     n = timezone.now()
-    april_fools = n.day = 1 and n.month == 4
+    april_fools = n.day == 1 and n.month == 4
 
     return {'april_fools': april_fools}

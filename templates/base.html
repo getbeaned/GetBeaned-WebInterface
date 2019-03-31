@@ -2,6 +2,7 @@
 {% load socialaccount %}
 {% load cache %}
 {% load analytical %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,6 +10,7 @@
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
     {% analytical_head_top %}
     <link rel="shortcut icon"
           type="image/png"
@@ -88,7 +90,7 @@
     {% block head %}
     {% endblock %}
     {% if april_fools %}
-        <script src="{% static 'js/AprilApril.min.js' %}"></script>
+        <script src="{% static 'js/AprilApril.js' %}"></script> <!-- 🐟, 🐡, 🦞, 🦈, 🐙, 🐬, 🦑, 🐳, 🐠, 🐋 -->
         <script src="{% static 'js/AprilAprilsound.min.js' %}"></script>
     {% endif %}
 
@@ -186,6 +188,7 @@
                        rel="noopener noreferrer"
                        href="https://discord.gg/cPbhK53">Support server</a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link"
                        target="_blank"
@@ -199,6 +202,13 @@
                            href="{% url 'account_logout' %}">Logout</a>
                     </li>
                 {% endif %}
+                {% if april_fools %}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="#">🐟 🐡 🦞 🦈 🐙 🐬 🦑 🐳 🐠 🐋</a>
+                    </li>
+                {% endif %}
+
             </ul>
         </div>
     </nav>
@@ -214,19 +224,7 @@
         $('[data-toggle="tooltip"]').tooltip({})
     })
 </script>
-{% if april_fools %}
-    <script>
-        var april = new AprilApril({
-            replaceImages: false,
-            playSound: true,
-            shrink: false,
-            scrambleLinks: false,
-            scrambleText: true,
-            sayPlease: false
-        });
-        april.fool();
-    </script>
-{% endif %}
+
 {% analytical_body_bottom %}
 </body>
 </html>

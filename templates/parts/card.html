@@ -22,7 +22,7 @@
                 {{ edit_form.reason }}
             </div>
         {% else %}
-            <p class="card-text"><strong>Reason:</strong> {{ action.formatted_reason }}
+            <div class="card-text"><strong>Reason:</strong> {{ action.formatted_reason }}
 
             {% if user.socialaccount_set.all.0.uid == action.responsible_moderator.discord_id|stringformat:"i" or user.socialaccount_set.all.0.uid == action.guild.owner.discord_id|stringformat:"i" %}
                 -
@@ -36,7 +36,7 @@
             <span class="badge badge-secondary">Bot</span>{% endif %}</a>
         <br><strong>Server: </strong><a
             href="{% url 'web-guild-details' guild_id=action.guild.discord_id %}">{{ action.guild.discord_name }}</a>
-        </p>
+        </div>
 
         {% if show_details_button %}
             <div class="text-center"><a href="{% url 'web-action-details' action_id=action.id %}"

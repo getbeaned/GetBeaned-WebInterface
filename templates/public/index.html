@@ -33,15 +33,19 @@
                  aria-labelledby="headingOne"
                  data-parent="#features">
                 <div class="card-body">
-                    The automoderator works by calculating a multiplicator, that represent how likely a user is there to spam. Using multiple data points, such as the Discord Nitro
-                    status of the
-                    user, the account age and how long ago the user joined, GetBeaned is able to have a pretty good estimate of the spam-potential of an user
+                    <p>
+                        The automoderator works by calculating a multiplicator, that represent how likely a user is there to spam. Using multiple data points, such as the Discord
+                        Nitro status of the user, the account age and how long ago the user joined, GetBeaned is able to have a pretty good estimate of the spam-potential of an user.
+                    </p>
 
-                    After calculating the multiplicator, GetBeaned will then look at the specific message to determine if it could be considered as spam, using factors such as the
-                    presence of
-                    CAPS, swear words, failed @everyone pings, ...
+                    <p>
+                        After calculating the multiplicator, GetBeaned will then look at the specific message to determine if it could be considered as spam, using factors such as
+                        the presence of CAPS, swear words, failed @everyone pings, ...
+                    </p>
 
-                    Finally, by multiplying the multiplicator and the message score, GetBeaned apply actions corresponding to a specific total score.
+                    <p>
+                        Finally, by multiplying the multiplicator and the message score, GetBeaned apply actions corresponding to a specific total score.
+                    </p>
                 </div>
             </div>
         </div>
@@ -64,15 +68,18 @@
                  aria-labelledby="headingTwo"
                  data-parent="#features">
                 <div class="card-body">
-                    Have you ever been on a server, and when trying to send a message quickly after another one, or just with a few CAPS letters, only to see it get removed by a
-                    too strict
-                    moderation bot, while, at the same time in another channel, a user is spamming mentions without getting banned ? Well, if you don't want that to happen on your
-                    server,
-                    <strong>GetBeaned is the solution!</strong>
-
-                    A user that just joined and that try to post invite links should be treated as a spammer while a trusted user that has been there for a year shouldn't. And
-                    that's what the
-                    GetBeaned AutoModerator does.
+                    <p>
+                        Have you ever been on a server, and when trying to send a message quickly after another one, or just with a few CAPS letters, only to see it get removed by a
+                        too strict moderation bot, while, at the same time in another channel, a user is spamming mentions without getting banned ? Well, if you don't want that to
+                        happen on your
+                        server,
+                        <strong>GetBeaned is the solution!</strong>
+                    </p>
+                    <p>
+                        A user that just joined and that try to post invite links should be treated as a spammer while a trusted user that has been there for a year shouldn't. And
+                        that's what the
+                        GetBeaned AutoModerator does.
+                    </p>
                 </div>
             </div>
         </div>
@@ -95,10 +102,12 @@
                  aria-labelledby="headingThree"
                  data-parent="#features">
                 <div class="card-body">
-                    You can configure GetBeaned on the webinterface, by logging in with discord. However, the defaults provided are quite good, and just enabling
-                    Thresholds and automod should get you started!
-
-                    But, if you need, more than 60 configuration variables are available, so customising the bot shouldn't be a problem
+                    <p>
+                        You can configure GetBeaned on the webinterface, by logging in with discord. However, the defaults provided are quite good, and just enabling Thresholds and automod should get you started!
+                    </p>
+                    <p>
+                        But, if you need, more than 60 configuration variables are available, so customising the bot shouldn't be a problem
+                    </p>
                 </div>
             </div>
         </div>
@@ -149,7 +158,9 @@
                  aria-labelledby="headingFive"
                  data-parent="#features">
                 <div class="card-body">
-                    Not a problem, we are here to help on the <a href="https://discordapp.com/invite/cPbhK53">support server</a>
+                    <p>
+                        Not a problem, we are here to help on the <a href="https://discordapp.com/invite/cPbhK53">support server</a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -182,4 +193,17 @@
             </div>
         </div>
     </div>
+    {% if april_fools %}
+        <script>
+            var april = new AprilApril({
+                replaceImages: false,
+                playSound: true,
+                shrink: false,
+                scrambleLinks: false,
+                scrambleText: true,
+                sayPlease: false
+            });
+            april.fool();
+        </script>
+    {% endif %}
 {% endblock %}
