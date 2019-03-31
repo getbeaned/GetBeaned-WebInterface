@@ -191,6 +191,7 @@
 
     <div id="graph_actions_time"></div>
     <div id="graph_actions_time_am"></div>
+    <div id="graph_actions"></div>
     <div id="graph_moderators"></div>
     <script>
         Highcharts.chart('graph_actions_time', {
@@ -272,7 +273,10 @@
                 name: 'Unbans',
                 data: {{ graph_actions_time_x.unban }},
                 color: 'green'
-            }
+            },
+
+
+
             ]
         });
 
@@ -339,6 +343,7 @@
             ]
         });
 
+
         Highcharts.chart('graph_moderators', {
             title: {
                 text: 'Proportion of human moderators actions saved'
@@ -349,12 +354,32 @@
             },
 
             series: [{
+                name: '',
                 type: 'pie',
                 data: {{ graph_moderators_data|safe }}
 
             }]
 
         });
+        Highcharts.chart('graph_actions', {
+            title: {
+                text: 'Proportion of actions by type'
+            },
+
+            subtitle: {
+                text: 'Excluding AutoModerator'
+            },
+
+            series: [{
+                name: '',
+                type: 'pie',
+                data: {{ graph_actions|safe }}
+
+            }]
+
+        });
+
+
     </script>
 
 

@@ -70,6 +70,17 @@ def web_index(request):
 @cache_page(60 * 1)
 @vary_on_cookie
 def web_stats(request):
+    COLORS = {
+                'unban': 'green',
+                'unmute': 'darkgreen',
+                'note': 'grey',
+                'warn': 'orange',
+                'mute': 'rebeccapurple',
+                'kick': 'orangered',
+                'softban': 'red',
+                'ban': 'darkred'
+
+            }
     general_stats = {
         "actions_count": Action.objects.count(),
         "guilds_count": DiscordGuild.objects.count(),
@@ -98,11 +109,18 @@ def web_stats(request):
     graph_actions_time_x = defaultdict(lambda: [0] * 24)
     graph_actions_time_am_x = defaultdict(lambda: [0] * 24)
 
+    graph_actions = defaultdict(int)
+
     for row in actions:
         if int(row.responsible_moderator.discord_id) > 999:
             graph_actions_time_x[row.action_type][row.hour] += 1
+            graph_actions[row.action_type] += 1
         elif int(row.responsible_moderator.discord_id) == 1:
             graph_actions_time_am_x[row.action_type][row.hour] += 1
+
+
+
+    graph_actions = json.dumps([{"name": key, "y": value, "color": COLORS[key]} for key, value in graph_actions.items()])
 
     guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').filter(discord_user_count__gt=15).annotate(actions_count=Count('actions')).all()
 
@@ -128,6 +146,7 @@ def web_stats(request):
 
     return render(request, 'public/stats.html', {"general_stats": general_stats,
                                                  "graph_moderators_data": graph_moderators_data,
+                                                 "graph_actions": graph_actions,
                                                  "graph_actions_time_y": graph_actions_time_y,
                                                  "graph_actions_time_x": graph_actions_time_x,
                                                  "graph_actions_time_am_x": graph_actions_time_am_x,
