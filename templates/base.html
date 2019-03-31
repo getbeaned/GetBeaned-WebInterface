@@ -5,10 +5,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% analytical_head_top %}
+
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    {% analytical_head_top %}
     <link rel="shortcut icon"
           type="image/png"
           href="{% static 'favicon.ico' %}"/>
@@ -86,6 +87,11 @@
 
     {% block head %}
     {% endblock %}
+    {% if april_fools %}
+        <script src="{% static 'js/AprilApril.min.js' %}"></script>
+        <script src="{% static 'js/AprilAprilsound.min.js' %}"></script>
+    {% endif %}
+
     {% analytical_head_bottom %}
 </head>
 <body>
@@ -208,6 +214,19 @@
         $('[data-toggle="tooltip"]').tooltip({})
     })
 </script>
+{% if april_fools %}
+    <script>
+        var april = new AprilApril({
+            replaceImages: false,
+            playSound: true,
+            shrink: false,
+            scrambleLinks: false,
+            scrambleText: true,
+            sayPlease: false
+        });
+        april.fool();
+    </script>
+{% endif %}
 {% analytical_body_bottom %}
 </body>
 </html>
