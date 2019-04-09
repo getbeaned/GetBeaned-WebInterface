@@ -349,7 +349,7 @@ class GuildSettings(models.Model):
     logs_moderation_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log moderation messages to",
                                                   default="0")
 
-    logs_joins_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log joins and leave to",
+    logs_joins_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log joins and leaves to",
                                              default="0")
     logs_member_edits_channel_id = models.CharField(max_length=40,
                                                     verbose_name="ID of the channel to log members name changes to", default="0")
