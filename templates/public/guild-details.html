@@ -27,6 +27,7 @@
 {% endblock %}
 
 {% block content %}
+    <h1>{{ guild.discord_name }}</h1>
     {% if user|can_edit:guild %}
         <h2>Server settings</h2>
         You can edit your server settings by clicking on
