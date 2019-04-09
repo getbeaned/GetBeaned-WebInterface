@@ -279,6 +279,10 @@ class GuildSettings(models.Model):
         help_text="Set to 0 to disable trusting servers using their member count",
         default=10000)
 
+    automod_note_message_deletions = models.BooleanField(
+        verbose_name="enable adding notes to users when one of their message is deleted by the automod",
+        help_text="Notes don't count against thresholds but may clutter up your server display. You can recover a deleted message with +snipe",
+        default=False)
     # Thresholds
 
     thresholds_enable = models.BooleanField(verbose_name="enable thresholds", default=False)

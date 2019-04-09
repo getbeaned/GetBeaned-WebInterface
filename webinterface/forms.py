@@ -101,6 +101,7 @@ class WebSettingsForm(ModelForm):
                             *[Div(field_name) for field_name in ['automod_ignore_level',
                                                                  'automod_ignore_invites_in',
                                                                  'automod_minimal_membercount_trust_server',
+                                                                 'automod_note_message_deletions'
                                                                  ]]
                             ),
                         ),
