@@ -123,7 +123,6 @@ DATABASES = {
         'PASSWORD': credentials["db_password"],
         'HOST': 'localhost',
         'PORT': '',
-        'CONN_MAX_AGE': 600,
     }
 }
 
@@ -233,7 +232,7 @@ CACHES = {
         'LOCATION': '/var/tmp/django_cache',
         'TIMEOUT': 600,
         'OPTIONS': {
-            'MAX_ENTRIES': 1000
+            'MAX_ENTRIES': 10000
         }
     }
 }
