@@ -96,6 +96,7 @@ class WebSettingsForm(ModelForm):
                                 """),
                             *[Div(field_name) for field_name in ['autotrigger_enable',
                                                                  'autotrigger_sexdatingdiscordbots_score',
+                                                                 'autotrigger_instantessaydiscordbots_score'
                                                                  ]]
                             ),
                         Tab('Misc options',

@@ -156,6 +156,13 @@ class GuildSettings(models.Model):
         default=10
     )
 
+    autotrigger_instantessaydiscordbots_score = models.FloatField(
+        verbose_name="message from userbots spamming for an essay writing website",
+        help_text="Set to 0 to disable",
+        default=10
+    )
+
+
     # Automod
     ## Actions
     automod_enable = models.BooleanField(verbose_name="enable Automod", default=False)
