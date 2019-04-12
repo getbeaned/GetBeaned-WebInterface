@@ -83,6 +83,7 @@ class WebSettingsForm(ModelForm):
                                                                  'automod_score_contain_invites',
                                                                  'automod_score_repeated',
                                                                  'automod_score_bad_words',
+                                                                 'automod_score_zalgo',
                                                                  ]]
                             ),
                         Tab('AutoTrigger',

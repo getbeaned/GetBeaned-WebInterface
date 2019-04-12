@@ -262,6 +262,12 @@ class GuildSettings(models.Model):
         default=0.15
     )
 
+    automod_score_zalgo = models.FloatField(
+        verbose_name="message contains zalgo text",
+        help_text="Zalgo is \"corrupted\" text that takes up a lot of screen real-estate and used to crash the discord client.",
+        default=1.3
+    )
+
     ## Misc
     automod_ignore_level = models.IntegerField(
         verbose_name="minimum bot level required for automod to ignore you",
