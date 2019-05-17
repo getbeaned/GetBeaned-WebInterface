@@ -103,10 +103,17 @@ class WebSettingsForm(ModelForm):
                             *[Div(field_name) for field_name in ['automod_ignore_level',
                                                                  'automod_ignore_invites_in',
                                                                  'automod_minimal_membercount_trust_server',
-                                                                 'automod_note_message_deletions'
+                                                                 'automod_note_message_deletions',
                                                                  ]]
                             ),
                         ),
+                    ),
+                Tab('DeHoister',
+                    *[Div(field_name) for field_name in ['dehoist_enable',
+                                                         'dehoist_ignore_level',
+                                                         'dehoist_intensity',
+                                                         'dehoist_action',
+                                                         ]]
                     ),
                 Tab('Thresholds',
                     *[Div(field_name) for field_name in ['thresholds_enable',
@@ -123,6 +130,7 @@ class WebSettingsForm(ModelForm):
                                                          'permissions_banned',
                                                          ]]
                     ),
+
                 Tab('Logs',
                     *[Div(field_name) for field_name in ['logs_enable',
                                                          'logs_as_embed',

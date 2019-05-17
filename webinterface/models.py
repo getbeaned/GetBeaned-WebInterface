@@ -72,6 +72,7 @@ class DiscordUser(models.Model):
         action_mapping = {
             "softban": 5,
             "kick": 3,
+            "mute": 2,
             "warn": 1,
             None: 0
         }
@@ -80,7 +81,7 @@ class DiscordUser(models.Model):
         worst_type = {}
 
         for action in actions:
-            if action.action_type not in ["note"] and action.guild.discord_user_count >= 100:
+            if action.action_type not in ["note", "unmute"] and action.guild.discord_user_count >= 100:
                 if action.action_type == "ban":
                     banned_in.add(action.guild)
                 elif action.action_type == "unban":
@@ -161,7 +162,6 @@ class GuildSettings(models.Model):
         help_text="Set to 0 to disable",
         default=10
     )
-
 
     # Automod
     ## Actions
@@ -296,6 +296,35 @@ class GuildSettings(models.Model):
         verbose_name="enable adding notes to users when one of their message is deleted by the automod",
         help_text="Notes don't count against thresholds but may clutter up your server display. You can recover a deleted message with +snipe",
         default=False)
+
+    # Dehoister
+
+    dehoist_enable = models.BooleanField(verbose_name="remove special characters from users names (dehoist)",
+                                         help_text="Activating this will apply to new nicknames changes only",
+                                         default=False)
+
+    dehoist_ignore_level = models.IntegerField(verbose_name="minimum bot level required for the dehoister to ignore you",
+                                               help_text="Level 2 is trusted users, 3 moderators, 4 admins and 5 owner.",
+                                               default=2
+                                               )
+
+    dehoist_intensity = models.CharField(verbose_name="intensity level of the dehoister",
+                                         choices=(("1", "Low: only nicknames starying with !"),
+                                                  ("2", "Medium: remove all special chars at the beginning of names"),
+                                                  ("3", "High: also remove aa from the start of nicknames")),
+                                         default=1,
+                                         max_length=4
+                                         )
+
+    dehoist_action = models.CharField(verbose_name="Action taken when dehoisting a name",
+                                      choices=(("nothing", "Dehoist"),
+                                               ("message", "Dehoist and inform the user"),
+                                               ("note", "Dehoist and add a note to the user"),
+                                               ("warn", "Dehoist and warn the user")),
+                                      default="note",
+                                      max_length=15
+                                      )
+
     # Thresholds
 
     thresholds_enable = models.BooleanField(verbose_name="enable thresholds", default=False)
