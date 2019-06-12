@@ -140,7 +140,6 @@ class DiscordGuild(models.Model):
 
 
 class GuildSettings(models.Model):
-
     @property
     def admin_url(self):
         return reverse('admin:{0}_{1}_change'.format(self._meta.app_label, self._meta.model_name), args=(self.pk,))
@@ -159,6 +158,12 @@ class GuildSettings(models.Model):
 
     autotrigger_instantessaydiscordbots_score = models.FloatField(
         verbose_name="message from userbots spamming for an essay writing website",
+        help_text="Set to 0 to disable",
+        default=10
+    )
+
+    autotrigger_sexbots_score = models.FloatField(
+        verbose_name="various userbots posting links to porn websites",
         help_text="Set to 0 to disable",
         default=10
     )
@@ -282,7 +287,7 @@ class GuildSettings(models.Model):
         default=2)
 
     automod_ignore_invites_in = models.CharField(
-        max_length=40,
+        max_length=900,
         verbose_name="channel id where the bot will ignore untrusted invites",
         help_text="Set to 0 to disable ignoring invites in a channel",
         default="0")
