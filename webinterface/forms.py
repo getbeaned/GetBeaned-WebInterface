@@ -100,6 +100,19 @@ class WebSettingsForm(ModelForm):
                                                                  'autotrigger_sexbots_score',
                                                                  ]]
                             ),
+                        Tab('AutoInspect',
+                            HTML("""</br><div class="alert alert-info" role="alert">
+                                AutoInspect inspect people profiles for pre-configured patterns and then act on them. This feature is experimental. 
+                                Please go to the support server if you have any questions.</br>
+                                
+                                ⚠️ Activating this can kick people when they join, thus limiting their ability to warn you of a misconfiguration.
+                                 For this reason, you MUST have a configured log channel (AutoInspect logs)
+                              </div>
+                            """),
+                            *[Div(field_name) for field_name in ['autoinspect_enable',
+                                                                 'autoinspect_pornspam_bots',
+                                                                 ]]
+                            ),
                         Tab('Misc options',
                             *[Div(field_name) for field_name in ['automod_ignore_level',
                                                                  'automod_ignore_invites_in',
@@ -140,6 +153,7 @@ class WebSettingsForm(ModelForm):
                                                          'logs_member_edits_channel_id',
                                                          'logs_edits_channel_id',
                                                          'logs_delete_channel_id',
+                                                         'logs_autoinspect_channel_id'
                                                          ]]
                     ),
                 Tab('Misc',

@@ -147,6 +147,16 @@ class GuildSettings(models.Model):
     guild = models.OneToOneField(DiscordGuild, on_delete=models.CASCADE, related_name='_settings', db_index=True)
     imported_bans = models.BooleanField(default=False)
 
+    # AutoInspect
+    autoinspect_enable = models.BooleanField(verbose_name="enable AutoInspect", help_text="AutoInspect tries to detect bot accounts when they join.", default=False)
+
+    AUTOINSPECT_ACTIONS = ((1, 'Do Nothing'),
+                           (2, 'Warn admins'),
+                           (3, 'Kick'))
+
+    autoinspect_pornspam_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bots that come to spam porn on channels.", default=1)
+
+
     # AutoTrigger
     autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)
 
@@ -389,6 +399,7 @@ class GuildSettings(models.Model):
         verbose_name="enable logging actions to a channel",
         help_text="Set a specific log channel ID to 0 to disable that particular log",
         default=False)
+
     logs_as_embed = models.BooleanField(verbose_name="use cooler embeds in logs",
                                         help_text="Disable to use plain text",
                                         default=True)
@@ -404,6 +415,9 @@ class GuildSettings(models.Model):
     logs_edits_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log messages edits to", default="0")
     logs_delete_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log messages delete to",
                                               default="0")
+
+    logs_autoinspect_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log AutoInspect actions to. This is required if you want AutoInspect to work.",
+                                                   default="0")
 
     # Bot
 
