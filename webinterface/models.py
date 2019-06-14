@@ -152,7 +152,7 @@ class GuildSettings(models.Model):
 
     AUTOINSPECT_ACTIONS = ((1, 'Do Nothing'),
                            (2, 'Warn admins'),
-                           (3, 'Kick (use with caution)'),
+                           (3, 'Kick and delete messages (Softban - use with caution)'),
                            (4, 'Ban (use with caution)'))
 
     autoinspect_pornspam_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bots that come to spam porn on channels.", default=1)
