@@ -4,7 +4,7 @@ description: Quick primer to get your server protected quickly.
 
 # QuickStart: Setting up GetBeaned on your server
 
-## Adding GetBeaned to your server
+### Adding GetBeaned to your server
 
 First, we'll have to add GetBeaned to your server. 
 
