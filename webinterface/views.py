@@ -71,15 +71,15 @@ def web_index(request):
 @vary_on_cookie
 def web_stats(request):
     COLORS = {
-                'unban': 'green',
-                'unmute': 'darkgreen',
-                'note': 'grey',
-                'warn': 'orange',
-                'mute': 'rebeccapurple',
-                'kick': 'orangered',
-                'softban': 'red',
-                'ban': 'darkred',
-            }
+        'unban': 'green',
+        'unmute': 'darkgreen',
+        'note': 'grey',
+        'warn': 'orange',
+        'mute': 'rebeccapurple',
+        'kick': 'orangered',
+        'softban': 'red',
+        'ban': 'darkred',
+    }
     general_stats = {
         "actions_count": Action.objects.count(),
         "guilds_count": DiscordGuild.objects.count(),
@@ -100,7 +100,8 @@ def web_stats(request):
     )
 
     # create a new field to extract hour from timestamp field
-    actions = Action.objects.select_related('responsible_moderator').only('action_type', 'responsible_moderator__discord_id').annotate(hour=ExtractHour('timestamp')).order_by().all()
+    actions = Action.objects.select_related('responsible_moderator').only('action_type', 'responsible_moderator__discord_id').annotate(
+        hour=ExtractHour('timestamp')).order_by().all()
 
     # create a default dict to insert a list if key is not exist
     graph_actions_time_y = list(range(0, 24))
@@ -118,11 +119,10 @@ def web_stats(request):
         elif int(row.responsible_moderator.discord_id) == 1:
             graph_actions_time_am_x[row.action_type][row.hour] += 1
 
-
-
     graph_actions = json.dumps([{"name": key, "y": value, "color": COLORS[key]} for key, value in graph_actions.items()])
 
-    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').filter(discord_user_count__gt=15).annotate(actions_count=Count('actions')).all()
+    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').filter(
+        discord_user_count__gt=15).annotate(actions_count=Count('actions')).all()
 
     graph_servers_member_count_data = {"automod": [], "notautomod": []}
 
@@ -299,9 +299,12 @@ def web_user_details(request, user_id: int, guild_id=None):
         actions_given = user.actions_given.all()
         guild = None
 
+    par = Paginator(actions_received, 4)
+    pag = Paginator(actions_given, 4)
+
     return render(request, 'public/user-details.html',
-                  {'d_user': user, 'guild': guild, 'actions_received': Paginator(actions_received, 4).get_page(request.GET.get('page_ar')),
-                   'actions_given': Paginator(actions_given, 4).get_page(request.GET.get('page_ag'))})
+                  {'d_user': user, 'guild': guild, 'actions_received': par.get_page(request.GET.get('page_ar')),
+                   'actions_given': pag.get_page(request.GET.get('page_ag')), 'par': par.count, 'pag': pag.count})
 
 
 @api_login_required
