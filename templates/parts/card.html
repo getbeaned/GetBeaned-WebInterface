@@ -1,4 +1,4 @@
-<div class="border rounded mx-auto"
+<div class="border rounded mx-auto {% if action.pardonned %}pardonned{% endif %}"
      style="max-width: {% if show_details_button %}17{% else %}20{% endif %}rem; margin-bottom:1rem;">
     <a href="{% url 'web-user-details' guild_id=action.guild.discord_id user_id=action.user.discord_id %}">
         <img class="card-img-top"
@@ -21,6 +21,7 @@
                 <label for="id_reason"><strong>Reason:</strong></label><br/>
                 {{ edit_form.reason }}
             </div>
+            <div><label for="id_pardonned"><strong>Pardonned:</strong></label>{{ edit_form.pardonned }}</div>
         {% else %}
             <div class="card-text"><strong>Reason:</strong> {{ action.formatted_reason }}
 
@@ -51,7 +52,6 @@
             {% if user.is_staff %}
                 <br/><a href="{{ action.admin_url }}">Edit this in the admin panel</a>
             {% endif %}
-
         </div>
     </div>
 </div>

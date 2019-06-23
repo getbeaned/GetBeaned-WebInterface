@@ -38,7 +38,7 @@ class ActionEditForm(ModelForm):
     class Meta:
         model = Action
         # include all fields you're saving from the form here
-        fields = ['reason']
+        fields = ['reason', 'pardonned']
 
         widgets = {
             'reason': Textarea(attrs={"class": "form-control", "rows": 4}),

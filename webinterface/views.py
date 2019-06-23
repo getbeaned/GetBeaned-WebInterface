@@ -347,7 +347,7 @@ def api_users_counters(request, guild_id: int, user_id: int):
         return JsonResponse({'status': 'Not Implemented'})
     else:
         counters = {key[0]: 0 for key in ACTIONS_TYPES}
-        actions = Action.objects.filter(user=user, guild=guild).all()
+        actions = Action.objects.filter(user=user, guild=guild, pardonned=False).all()
         for action in actions:
             counters[action.action_type] += 1
 

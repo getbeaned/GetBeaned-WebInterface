@@ -120,6 +120,8 @@ class DiscordGuild(models.Model):
     discord_created_at = models.DateTimeField()
     discord_user_count = models.IntegerField()
 
+    last_modified = models.DateTimeField(auto_now=True)
+
     owner = models.ForeignKey(DiscordUser, on_delete=models.DO_NOTHING, related_name='guilds_owned')
 
     @property
@@ -464,6 +466,7 @@ class Action(models.Model):
                                               null=True, db_index=True)
     timestamp = models.DateTimeField(default=timezone.now)
     until = models.DateTimeField(null=True, default=None, blank=True)
+    pardonned = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']

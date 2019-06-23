@@ -84,3 +84,10 @@
 .action-text-ban {
     color: darkred;
 }
+
+
+.pardonned {
+    background: rgb(194,38,38);
+    background: linear-gradient(45deg, rgba(194,38,38,0.5) 0%, rgba(194,38,38,0.5) 24%, rgba(233,47,47,0.5) 25%, rgba(233,47,47,0.5) 49%, rgba(194,38,38,0.5) 50%, rgba(194,38,38,0.5) 75%, rgba(233,47,47,0.5) 75%, rgba(233,47,47,0.5) 100%);
+    background-size: 56px 56px;
+}
