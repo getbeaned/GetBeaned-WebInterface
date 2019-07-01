@@ -152,6 +152,9 @@ class GuildSettings(models.Model):
     # AutoInspect
     autoinspect_enable = models.BooleanField(verbose_name="enable AutoInspect", help_text="AutoInspect tries to detect bot accounts when they join.", default=False)
 
+    autoinspect_bypass_enable = models.BooleanField(verbose_name="enable AutoInspect Bypass", help_text="AutoInspect won't act on a user again if it acted on it in the last 10 minutes. "
+                                                                                                        "This allow users to join the server in case of false positives by re-joining.", default=True)
+
     AUTOINSPECT_ACTIONS = ((1, 'Do Nothing'),
                            (2, 'Warn admins'),
                            (3, 'Kick and delete messages (Softban - use with caution)'),
