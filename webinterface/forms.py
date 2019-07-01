@@ -100,20 +100,6 @@ class WebSettingsForm(ModelForm):
                                                                  'autotrigger_sexbots_score',
                                                                  ]]
                             ),
-                        Tab('AutoInspect',
-                            HTML("""</br><div class="alert alert-info" role="alert">
-                                AutoInspect inspect people profiles for pre-configured patterns and then act on them. This feature is experimental. 
-                                Please go to the support server if you have any questions.</br>
-                                
-                                ⚠️ Activating this can kick/ban people when they join, thus limiting their ability to warn you of a misconfiguration.
-                                 For this reason, you <strong>MUST</strong> have a configured log channel (AutoInspect logs)
-                              </div>
-                            """),
-                            *[Div(field_name) for field_name in ['autoinspect_enable',
-                                                                 'autoinspect_bypass_enable',
-                                                                 'autoinspect_pornspam_bots',
-                                                                 ]]
-                            ),
                         Tab('Misc options',
                             *[Div(field_name) for field_name in ['automod_ignore_level',
                                                                  'automod_ignore_invites_in',
@@ -122,6 +108,20 @@ class WebSettingsForm(ModelForm):
                                                                  ]]
                             ),
                         ),
+                    ),
+                Tab('AutoInspect',
+                    HTML("""</br><div class="alert alert-info" role="alert">
+                                        AutoInspect inspect people profiles for pre-configured patterns and then act on them. This feature is experimental. 
+                                        Please go to the support server if you have any questions.</br>
+
+                                        ⚠️ Activating this can kick/ban people when they join, thus limiting their ability to warn you of a misconfiguration.
+                                         For this reason, you <strong>MUST</strong> have a configured log channel (AutoInspect logs)
+                                      </div>
+                                    """),
+                    *[Div(field_name) for field_name in ['autoinspect_enable',
+                                                         'autoinspect_bypass_enable',
+                                                         'autoinspect_pornspam_bots',
+                                                         ]]
                     ),
                 Tab('DeHoister',
                     *[Div(field_name) for field_name in ['dehoist_enable',
