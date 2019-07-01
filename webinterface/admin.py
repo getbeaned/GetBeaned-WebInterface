@@ -5,13 +5,20 @@ from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings,
 # Register your models here.
 
 class GuildSettingsInline(admin.TabularInline):
-    model = GuildSettings
+    model = GuildSettings,
+    #autocomplete_fields = ['permissions_admins', 'permissions_moderators', 'permissions_trusted', 'permissions_banned']
 
 
 class GuildAdmin(admin.ModelAdmin):
-    inlines = [
-        GuildSettingsInline,
-    ]
+    model = DiscordGuild,
+    list_display = ('discord_name', 'discord_created_at', 'discord_user_count')
+
+    list_filter = ('_settings__automod_enable', '_settings__autotrigger_enable', '_settings__autoinspect_enable')
+
+    autocomplete_fields = ['owner']
+    #inlines = [
+    #    GuildSettingsInline,
+    #]
 
 
 class UserSettingsInline(admin.TabularInline):
@@ -19,13 +26,22 @@ class UserSettingsInline(admin.TabularInline):
 
 
 class UserAdmin(admin.ModelAdmin):
+    model = DiscordUser,
     inlines = [
         UserSettingsInline,
     ]
+
+    search_fields = ['discord_name']
+
+class GuildSettingsAdmin(admin.ModelAdmin):
+    model = GuildSettings
+    readonly_fields = ['_settings']
+
+    autocomplete_fields = ['permissions_admins', 'permissions_moderators', 'permissions_trusted', 'permissions_banned']
 
 
 admin.site.register(DiscordUser, UserAdmin)
 admin.site.register(DiscordGuild, GuildAdmin)
 admin.site.register(Action)
-admin.site.register(GuildSettings)
+admin.site.register(GuildSettings, GuildSettingsAdmin)
 admin.site.register(APIAccess)
