@@ -1,4 +1,5 @@
 import json
+import datetime
 
 import django.utils.html
 from django.core.paginator import Paginator
@@ -121,17 +122,20 @@ def web_stats(request):
 
     graph_actions = json.dumps([{"name": key, "y": value, "color": COLORS[key]} for key, value in graph_actions.items()])
 
-    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable').filter(
+    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable', '_settings__autoinspect_enable', 'last_modified').filter(
         discord_user_count__gt=15).annotate(actions_count=Count('actions')).all()
 
-    graph_servers_member_count_data = {"automod": [], "notautomod": []}
+    graph_servers_member_count_data = {"automod": [], "notautomod": [], "removed": []}
 
-    graph_servers_member_vs_actions_data = {"automod": [], "notautomod": []}
+    graph_servers_member_vs_actions_data = {"automod": [], "notautomod": [], "removed": []}
     for g in guilds:
         # graph_servers_member_count_data
         p = {'name': django.utils.html.escape(g.discord_name), 'value': g.discord_user_count, 'guild_id': str(g.discord_id)}
         p2 = {'name': django.utils.html.escape(g.discord_name), 'x': g.discord_user_count, 'y': g.actions_count, 'guild_id': str(g.discord_id)}
-        if g.settings.automod_enable:
+        if g.last_modified < datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=7):
+            graph_servers_member_count_data["removed"].append(p)
+            graph_servers_member_vs_actions_data["removed"].append(p2)
+        elif g.settings.automod_enable or g.settings.autoinspect_enable:
             graph_servers_member_count_data["automod"].append(p)
             graph_servers_member_vs_actions_data["automod"].append(p2)
         else:
@@ -140,9 +144,11 @@ def web_stats(request):
 
     graph_servers_member_count_data["automod"] = json.dumps(graph_servers_member_count_data["automod"])
     graph_servers_member_count_data["notautomod"] = json.dumps(graph_servers_member_count_data["notautomod"])
+    graph_servers_member_count_data["removed"] = json.dumps(graph_servers_member_count_data["removed"])
 
     graph_servers_member_vs_actions_data["automod"] = json.dumps(graph_servers_member_vs_actions_data["automod"])
     graph_servers_member_vs_actions_data["notautomod"] = json.dumps(graph_servers_member_vs_actions_data["notautomod"])
+    graph_servers_member_vs_actions_data["removed"] = json.dumps(graph_servers_member_vs_actions_data["removed"])
 
     return render(request, 'public/stats.html', {"general_stats": general_stats,
                                                  "graph_moderators_data": graph_moderators_data,

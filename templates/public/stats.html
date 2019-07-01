@@ -132,7 +132,13 @@
                 name: 'AutoMod disabled',
                 color: "rgba(255,68,61,0.5)",
                 data: {{ graph_servers_member_vs_actions_data.notautomod|safe }}
-            }]
+            }, {
+                name: 'Server Removed or Inactive',
+                color: "rgba(100,100,100,0.5)",
+                data: {{ graph_servers_member_vs_actions_data.removed|safe }},
+                visible: false
+            }
+            ]
         });
 
         Highcharts.chart('graph_servers_member_count', {
@@ -182,7 +188,12 @@
                 name: 'AutoMod disabled',
                 data: {{ graph_servers_member_count_data.notautomod|safe }},
                 color: "rgba(255,68,61,0.5)"
-            },
+            }, {
+                name: 'Server Removed or Inactive',
+                data: {{ graph_servers_member_count_data.removed|safe }},
+                color: "rgba(100,100,100,0.5)",
+                visible: false
+            }
             ]
         });
     </script>
