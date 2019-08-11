@@ -154,11 +154,12 @@ class WebSettingsForm(ModelForm):
                                                          'logs_member_edits_channel_id',
                                                          'logs_edits_channel_id',
                                                          'logs_delete_channel_id',
-                                                         'logs_autoinspect_channel_id'
+                                                         'logs_autoinspect_channel_id',
                                                          ]]
                     ),
                 Tab('Misc',
                     *[Div(field_name) for field_name in ['bot_prefix',
+                                                         'logs_security_level',
                                                          ]]
                     ),
 

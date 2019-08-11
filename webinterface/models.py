@@ -149,6 +149,13 @@ class GuildSettings(models.Model):
     guild = models.OneToOneField(DiscordGuild, on_delete=models.CASCADE, related_name='_settings', db_index=True)
     imported_bans = models.BooleanField(default=False)
 
+    logs_security_level = models.CharField(max_length=90,
+                                           choices=(("1", "Public"),
+                                                    ("2", "Not displayed on HomePage"),
+                                                    ("3", "Private to trusted+"),
+                                                    ("4", "Admin only")), default="1",
+                                           help_text="set your logs to a more private if you don't want the general public to be able to view them.")
+
     # AutoInspect
     autoinspect_enable = models.BooleanField(verbose_name="enable AutoInspect", help_text="AutoInspect tries to detect bot accounts when they join.", default=False)
 

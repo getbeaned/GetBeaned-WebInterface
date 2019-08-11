@@ -62,8 +62,10 @@ def web_index(request):
         "thresholds_enabled_count": GuildSettings.objects.filter(thresholds_enable=True).count(),
     }
 
+    latest_action = Action.objects.filter(guild___settings__logs_security_level="1").latest(field_name="id")
+
     # latest_actions = Action.objects.order_by('-id')[:4]
-    latest_actions = [Action.objects.latest(field_name="id"), Action.objects.get(id=1319), Action.objects.get(id=1286), Action.objects.get(id=1143)]
+    latest_actions = [latest_action, Action.objects.get(id=1319), Action.objects.get(id=1286), Action.objects.get(id=1143)]
 
     return render(request, 'public/index.html', {"stats": stats, "latest_actions": latest_actions})
 
@@ -75,6 +77,7 @@ def session_info(request):
         "discord_id": request.user.socialaccount_set.first().uid,
         "logged_in": DiscordUser.objects.filter(discord_id=request.user.socialaccount_set.first().uid).first().discord_name,
     })
+
 
 @cache_page(60 * 1)
 @vary_on_cookie
@@ -130,7 +133,8 @@ def web_stats(request):
 
     graph_actions = json.dumps([{"name": key, "y": value, "color": COLORS[key]} for key, value in graph_actions.items()])
 
-    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable', '_settings__autoinspect_enable', 'last_modified').filter(
+    guilds = DiscordGuild.objects.select_related('_settings').only('discord_id', 'discord_name', 'discord_user_count', '_settings__automod_enable', '_settings__autoinspect_enable',
+                                                                   'last_modified').filter(
         discord_user_count__gt=15).annotate(actions_count=Count('actions')).all()
 
     graph_servers_member_count_data = {"automod": [], "notautomod": [], "removed": []}
@@ -186,10 +190,64 @@ def web_guild_list(request):
     return render(request, 'public/index.html')
 
 
+def can_access_actions(guild, logged_in_user=None, return_list=False, specific_action:Action=None):
+    logs_security_level = int(guild.settings.logs_security_level)
+    if logs_security_level in [1, 2]:
+        if return_list:
+            return guild.actions.all()
+        else:
+            return True
+    elif logs_security_level in [3, 4]:
+        logged_user = logged_in_user
+
+        if not logged_user:
+            if return_list:
+                return Action.objects.none()
+            else:
+                return False
+        else:
+            logged_user_id = logged_user.discord_id
+
+            if logs_security_level == 3 and \
+                    (logged_user_id in guild.settings.permissions_trusted.all() or
+                     logged_user_id in guild.settings.permissions_moderators.all() or
+                     logged_user_id in guild.settings.permissions_admins.all() or
+                     logged_user_id == guild.owner_id
+                    ):
+                if return_list:
+                    return guild.actions.all()
+                else:
+                    return True
+
+            elif logs_security_level == 4 and \
+                    (logged_user_id in guild.settings.permissions_admins.all() or
+                     logged_user_id == guild.owner_id):
+                if return_list:
+                    return guild.actions.all()
+                else:
+                    return True
+
+            else:
+                if return_list:
+                    return guild.actions.filter(responsible_moderator__discord_id=logged_user_id) | \
+                           guild.actions.filter(user__discord_id=logged_user_id)
+                else:
+                    if specific_action:
+                        return specific_action.responsible_moderator.discord_id == logged_user_id or \
+                                specific_action.user.discord_id == logged_user_id
+                    return False
+
+
 @vary_on_cookie
 def web_guild_details(request, guild_id: int):
     guild = get_object_or_404(DiscordGuild, discord_id=guild_id)
-    actions_list = guild.actions.all()
+    if request.user.is_authenticated:
+        logged_user = DiscordUser.objects.filter(discord_id=request.user.socialaccount_set.first().uid).first()
+    else:
+        logged_user = None
+
+    actions_list = can_access_actions(guild, logged_in_user=logged_user, return_list=True)
+
     page = request.GET.get('page')
     actions = Paginator(actions_list, 8).get_page(page)
 
@@ -378,7 +436,17 @@ def web_action_list(request):
 @vary_on_cookie
 def web_action_details(request, action_id: int):
     action = get_object_or_404(Action, id=action_id)
-    return render(request, 'public/action-details.html', {'action': action})
+
+    if request.user.is_authenticated:
+        logged_user = DiscordUser.objects.filter(discord_id=request.user.socialaccount_set.first().uid).first()
+    else:
+        logged_user = None
+
+    access_granted = can_access_actions(action.guild, logged_in_user=logged_user, return_list=True, specific_action=action)
+    if access_granted:
+        return render(request, 'public/action-details.html', {'action': action})
+    else:
+        return HttpResponseForbidden()
 
 
 @login_required()
