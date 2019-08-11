@@ -68,6 +68,14 @@ def web_index(request):
     return render(request, 'public/index.html', {"stats": stats, "latest_actions": latest_actions})
 
 
+def session_info(request):
+    return JsonResponse({
+        "user": request.user.username,
+        "accounts": len(request.user.socialaccount_set.all()),
+        "discord_id": request.user.socialaccount_set.first().uid,
+        "logged_in": DiscordUser.objects.filter(discord_id=request.user.socialaccount_set.first().uid).first().discord_name,
+    })
+
 @cache_page(60 * 1)
 @vary_on_cookie
 def web_stats(request):

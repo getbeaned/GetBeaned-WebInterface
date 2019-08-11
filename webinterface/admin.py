@@ -11,6 +11,8 @@ class GuildSettingsInline(admin.TabularInline):
 
 class GuildAdmin(admin.ModelAdmin):
     model = DiscordGuild,
+    readonly_fields = ['_settings']
+
     list_display = ('discord_name', 'discord_created_at', 'discord_user_count')
 
     list_filter = ('_settings__automod_enable', '_settings__autotrigger_enable', '_settings__autoinspect_enable')
@@ -33,9 +35,9 @@ class UserAdmin(admin.ModelAdmin):
 
     search_fields = ['discord_name']
 
+
 class GuildSettingsAdmin(admin.ModelAdmin):
     model = GuildSettings
-    readonly_fields = ['_settings']
 
     autocomplete_fields = ['permissions_admins', 'permissions_moderators', 'permissions_trusted', 'permissions_banned']
 

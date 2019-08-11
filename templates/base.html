@@ -74,7 +74,7 @@
           href="{% static 'css/base.css' %}">
 
     {% if discord_logged_user %}
-        {% with 'css/'|add:discord_logged_user.settings.theme|add:'.css' as stylesheet %}
+        {% with 'css/'|add:discord_logged_user.settings.theme|add:'' as stylesheet %}
             <link rel="stylesheet"
                   type="text/css"
                   href="{% static stylesheet %}"> <!-- Custom -->
