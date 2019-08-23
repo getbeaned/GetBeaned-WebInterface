@@ -3,7 +3,8 @@ import datetime
 
 import django.utils.html
 from django.core.paginator import Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
+
 
 from django.views.decorators.cache import cache_page
 from django.core import serializers
@@ -362,6 +363,11 @@ def web_user_list(request):
 def web_user_details(request, user_id: int, guild_id=None):
     user = get_object_or_404(DiscordUser, discord_id=user_id)
 
+    if request.user.is_authenticated:
+        logged_user_id = request.user.socialaccount_set.first().uid
+    else:
+        logged_user_id = None
+
     if guild_id:
         guild = get_object_or_404(DiscordGuild, discord_id=guild_id)
         actions_received = user.actions_received.filter(guild_id=guild_id).all()
@@ -370,6 +376,14 @@ def web_user_details(request, user_id: int, guild_id=None):
         actions_received = user.actions_received.all()
         actions_given = user.actions_given.all()
         guild = None
+
+    restrict_query = Q(guild___settings__logs_security_level=1) | Q(guild___settings__logs_security_level=2)
+
+    if logged_user_id:
+        restrict_query = restrict_query | Q(responsible_moderator__discord_id=logged_user_id) | Q(user__discord_id=logged_user_id)
+
+    actions_received = actions_received.filter(restrict_query)
+    actions_given = actions_given.filter(restrict_query)
 
     par = Paginator(actions_received, 4)
     pag = Paginator(actions_given, 4)
