@@ -439,11 +439,7 @@ class GuildSettings(models.Model):
                                                  default="fuck\nnigger")
     vip_custom_bad_regex_list = models.TextField(verbose_name="list of bad-regexes that should be used by AutoMod.",
                                                  help_text="Separate each bad-regex by a newline. You can usually type newlines using shift+enter.",
-                                                 default="fuck(?>ing|-off)?\\b\nnigge[ra]")
-    vip_custom_bad_words_used_in_automod = models.BooleanField(verbose_name="use the bad-strings specified on messages analysed by the AutoMod",
-                                                               default=False)
-    vip_custom_bad_words_used_in_autoinspect = models.BooleanField(verbose_name="use the bad-strings specified on names analysed by the AutoInspector",
-                                                                   default=False)
+                                                 default="\\bfuck(?:ing|-off)?\\b\nnigge[ra]")
 
     # Bot
 

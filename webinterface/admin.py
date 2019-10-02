@@ -6,7 +6,7 @@ from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings,
 
 class GuildSettingsInline(admin.TabularInline):
     model = GuildSettings,
-    #autocomplete_fields = ['permissions_admins', 'permissions_moderators', 'permissions_trusted', 'permissions_banned']
+    # autocomplete_fields = ['permissions_admins', 'permissions_moderators', 'permissions_trusted', 'permissions_banned']
 
 
 class GuildAdmin(admin.ModelAdmin):

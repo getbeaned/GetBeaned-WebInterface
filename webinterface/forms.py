@@ -169,9 +169,11 @@ class WebSettingsForm(ModelForm):
                     </div>"""),
                     *[Div(field_name) for field_name in ['vip_custom_bad_words_list',
                                                          'vip_custom_bad_regex_list',
-                                                         'vip_custom_bad_words_used_in_automod',
-                                                         'vip_custom_bad_words_used_in_autoinspect',
-                                                         ]]
+                                                         ]],
+                    HTML("""</br><div class="alert alert-warning" role="alert">
+                            Please test your regexes before submitting the form! Use <a href='https://regex101.com/'>Regex101</a> 
+                            to make sure they match what you want, nothing more and nothing less.
+                            </div>"""),
                     ),
             )
         )
