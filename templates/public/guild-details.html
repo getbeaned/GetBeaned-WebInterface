@@ -85,6 +85,10 @@
             <td>{{ guild.discord_user_count }}</td>
         </tr>
         <tr>
+            <td>VIP</td>
+            <td>{{ guild.settings.vip }}</td>
+        </tr>
+        <tr>
             <td>Automod Enabled</td>
             <td>{% if guild.settings.automod_enable %}
                     <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=1 %}">Yes</a>
