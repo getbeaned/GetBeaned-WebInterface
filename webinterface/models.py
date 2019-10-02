@@ -168,6 +168,7 @@ class GuildSettings(models.Model):
                            (4, 'Ban (use with caution)'))
 
     autoinspect_pornspam_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bots that come to spam porn on channels.", default=1)
+    autoinspect_username_check = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Check for bad words in users names when they join.", default=2)
 
 
     # AutoTrigger
