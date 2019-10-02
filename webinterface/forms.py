@@ -162,7 +162,17 @@ class WebSettingsForm(ModelForm):
                                                          'logs_security_level',
                                                          ]]
                     ),
-
+                Tab('VIP Settings',
+                    HTML("""</br><div class="alert alert-info" role="alert">
+                    The settings you can see on this tab are only available to VIP servers. You can edit them, but you'll need a VIP server for them to work.<br/>
+                    For more information about VIP servers, please see the <a href='https://docs.getbeaned.me/bot-documentation/vip-servers'>following documentation</a>
+                    </div>"""),
+                    *[Div(field_name) for field_name in ['vip_custom_bad_words_list',
+                                                         'vip_custom_bad_regex_list',
+                                                         'vip_custom_bad_words_used_in_automod',
+                                                         'vip_custom_bad_words_used_in_autoinspect',
+                                                         ]]
+                    ),
             )
         )
         self.helper.add_input(Submit('submit', 'Submit'))
@@ -171,4 +181,4 @@ class WebSettingsForm(ModelForm):
     class Meta:
         model = GuildSettings
         fields = '__all__'
-        exclude = ['guild', 'imported_bans']
+        exclude = ['guild', 'imported_bans', 'vip']
