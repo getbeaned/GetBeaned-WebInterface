@@ -340,7 +340,7 @@ class GuildSettings(models.Model):
                                                )
 
     dehoist_intensity = models.CharField(verbose_name="intensity level of the dehoister",
-                                         choices=(("1", "Low: only nicknames starying with !"),
+                                         choices=(("1", "Low: nicknames that are higher than 0"),
                                                   ("2", "Medium: remove all special chars at the beginning of names"),
                                                   ("3", "High: also remove aa from the start of nicknames")),
                                          default=1,
