@@ -110,6 +110,8 @@ class UserSettings(models.Model):
     user = models.OneToOneField(DiscordUser, on_delete=models.CASCADE, related_name='_settings', db_index=True)
 
     test_beta_features = models.BooleanField(default=False)
+    hide_servers_from_profile = models.BooleanField(default=False)
+
     theme = models.CharField(max_length=40, default="light.css", choices=(("light", "Light Theme"), ("dark", "Dark Theme"), ("cyborg", "Cyborg"), ("lux", "Lux")))
 
 

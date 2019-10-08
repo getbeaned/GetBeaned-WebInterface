@@ -109,34 +109,35 @@
         </tr>
         </tbody>
     </table>
-
-    {% with owner_status=d_user.guilds_owned.all admin_status=d_user.admin_status.all mod_status=d_user.moderator_status.all trusted_status=d_user.trusted_status.all %}
-        {% if owner_status|length or admin_status|length or mod_status|length or trusted_status|length %}
-            <h2>Servers this user helps to moderate:</h2>
-            <ul>
-                {% if owner_status|length %}
-                    <li>Owner status : {% for gs in owner_status %}
-                        <a href="{% url 'web-guild-details' guild_id=gs.discord_id %}">{{ gs.discord_name }}</a> {% endfor %}
-                    </li>
-                {% endif %}
-                {% if admin_status|length %}
-                    <li>Admin status : {% for gs in admin_status %}
-                        <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
-                    </li>
-                {% endif %}
-                {% if mod_status|length %}
-                    <li>Moderator status : {% for gs in mod_status %}
-                        <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
-                    </li>
-                {% endif %}
-                {% if trusted_status|length %}
-                    <li>Trusted status : {% for gs in trusted_status %}
-                        <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
-                    </li>
-                {% endif %}
-            </ul>
-        {% endif %}
-    {% endwith %}
+    {% if not d_user.settings.hide_servers_from_profile and not discord_logged_user.discord_id == d_user.discord_id %}
+        {% with owner_status=d_user.guilds_owned.all admin_status=d_user.admin_status.all mod_status=d_user.moderator_status.all trusted_status=d_user.trusted_status.all %}
+            {% if owner_status|length or admin_status|length or mod_status|length or trusted_status|length %}
+                <h2>Servers this user helps to moderate:</h2>
+                <ul>
+                    {% if owner_status|length %}
+                        <li>Owner status : {% for gs in owner_status %}
+                            <a href="{% url 'web-guild-details' guild_id=gs.discord_id %}">{{ gs.discord_name }}</a> {% endfor %}
+                        </li>
+                    {% endif %}
+                    {% if admin_status|length %}
+                        <li>Admin status : {% for gs in admin_status %}
+                            <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
+                        </li>
+                    {% endif %}
+                    {% if mod_status|length %}
+                        <li>Moderator status : {% for gs in mod_status %}
+                            <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
+                        </li>
+                    {% endif %}
+                    {% if trusted_status|length %}
+                        <li>Trusted status : {% for gs in trusted_status %}
+                            <a href="{% url 'web-guild-details' guild_id=gs.guild.discord_id %}">{{ gs.guild.discord_name }}</a> {% endfor %}
+                        </li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
 
 
     {% if user.is_staff %}
