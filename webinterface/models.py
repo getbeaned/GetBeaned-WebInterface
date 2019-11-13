@@ -519,7 +519,11 @@ class BotTask(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return f"#{self.id} {self.task_type}({self.arguments})"
+        if self.completed:
+            prefix = "#"
+        else:
+            prefix = ">"
+        return f"{prefix}{self.id} {self.task_type}({self.arguments})"
 
 
 class APIAccess(models.Model):
