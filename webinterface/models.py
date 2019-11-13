@@ -509,6 +509,19 @@ def get_token():
     return str(uuid.uuid4().hex)
 
 
+class BotTask(models.Model):
+    execute_at = models.DateTimeField(default=timezone.now)
+    completed = models.BooleanField(default=False)
+    task_type = models.CharField(max_length=100)
+    arguments = models.TextField(null=True, default=None, blank=True)
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"#{self.id} {self.task_type}({self.arguments})"
+
+
 class APIAccess(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     token = models.CharField(max_length=200, default=get_token)

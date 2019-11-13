@@ -4,7 +4,7 @@ import datetime
 import django.utils.html
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
-
+from django.utils import timezone
 
 from django.views.decorators.cache import cache_page
 from django.core import serializers
@@ -20,8 +20,8 @@ from collections import defaultdict
 from django.db.models.functions import ExtractHour
 
 from webinterface.edition_controls import can_edit
-from webinterface.forms import DiscordUserForm, DiscordGuildForm, ActionForm, ActionEditForm, WebSettingsForm
-from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings, ACTIONS_TYPES
+from webinterface.forms import DiscordUserForm, DiscordGuildForm, ActionForm, ActionEditForm, WebSettingsForm, BotTaskForm
+from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings, ACTIONS_TYPES, BotTask
 
 from functools import wraps
 from django.http import HttpResponseRedirect
@@ -509,3 +509,42 @@ def api_actions(request):
             return JsonResponse({'status': 'error', 'errors': form.errors})
     else:
         return JsonResponse({'status': 'Not Implemented'})
+
+
+@api_login_required
+@csrf_exempt
+def api_tasks(request):
+
+    if request.method == 'POST':
+        form = BotTaskForm(request.POST)
+
+        if form.is_valid():
+            task = form.save()
+            return JsonResponse({'status': 'ok', 'message': 'Task created with success', 'result': str(task)})
+
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    else:
+        tasks = BotTask.objects.filter(completed=False).filter(execute_at__lt=timezone.now()).all()
+
+        task_list = []
+
+        for task in tasks:
+            task_list.append({
+                "id": task.id,
+                "type": task.task_type,
+                "arguments": task.arguments
+            })
+
+        return JsonResponse(task_list, safe=False)
+
+
+@api_login_required
+@csrf_exempt
+def api_complete_task(request, task_id):
+    task = get_object_or_404(BotTask, id=task_id)
+
+    task.completed = True
+    task.save()
+
+    return JsonResponse({"ok": True})

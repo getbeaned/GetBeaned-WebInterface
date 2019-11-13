@@ -2,7 +2,7 @@ from crispy_forms.bootstrap import TabHolder, Tab, Alert
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Div, Submit, HTML
 from django.forms import ModelForm, Textarea, ModelMultipleChoiceField
-from .models import DiscordUser, DiscordGuild, Action, GuildSettings
+from .models import DiscordUser, DiscordGuild, Action, GuildSettings, BotTask
 
 
 class DiscordUserForm(ModelForm):
@@ -43,6 +43,15 @@ class ActionEditForm(ModelForm):
         widgets = {
             'reason': Textarea(attrs={"class": "form-control", "rows": 4}),
         }
+
+
+class BotTaskForm(ModelForm):
+    class Meta:
+        model = BotTask
+        # include all fields you're saving from the form here
+        fields = '__all__'
+        exclude = ['completed']
+
 
 
 class WebSettingsForm(ModelForm):
