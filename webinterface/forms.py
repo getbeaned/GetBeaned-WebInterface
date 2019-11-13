@@ -161,6 +161,7 @@ class WebSettingsForm(ModelForm):
                 Tab('Misc',
                     *[Div(field_name) for field_name in ['bot_prefix',
                                                          'logs_security_level',
+                                                         'force_justification_level'
                                                          ]]
                     ),
                 Tab('VIP Settings',

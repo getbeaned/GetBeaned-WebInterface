@@ -158,11 +158,20 @@ class GuildSettings(models.Model):
                                                     ("4", "Admin only")), default="1",
                                            help_text="set your logs to a more private if you don't want the general public to be able to view them.")
 
+    force_justification_level = models.CharField(verbose_name="Force action justification for",
+                                                 max_length=90,
+                                                 choices=(("1", "Nobody"),
+                                                          ("2", "Trusted users"),
+                                                          ("3", "Everyone")
+                                                          ), default="1",
+                                                 help_text="force moderators to justify their actions by attaching a screenshot and a reason to cases.")
+
     # AutoInspect
     autoinspect_enable = models.BooleanField(verbose_name="enable AutoInspect", help_text="AutoInspect tries to detect bot accounts when they join.", default=False)
 
-    autoinspect_bypass_enable = models.BooleanField(verbose_name="enable AutoInspect Bypass", help_text="AutoInspect won't act on a user again if it acted on it in the last 10 minutes. "
-                                                                                                        "This allow users to join the server in case of false positives by re-joining.", default=True)
+    autoinspect_bypass_enable = models.BooleanField(verbose_name="enable AutoInspect Bypass",
+                                                    help_text="AutoInspect won't act on a user again if it acted on it in the last 10 minutes. "
+                                                              "This allow users to join the server in case of false positives by re-joining.", default=True)
 
     AUTOINSPECT_ACTIONS = ((1, 'Do Nothing'),
                            (2, 'Warn admins'),
@@ -171,7 +180,6 @@ class GuildSettings(models.Model):
 
     autoinspect_pornspam_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bots that come to spam porn on channels.", default=1)
     autoinspect_username_check = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Check for bad words in users names when they join.", default=2)
-
 
     # AutoTrigger
     autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)
