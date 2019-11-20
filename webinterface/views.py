@@ -1,5 +1,6 @@
 import json
 import datetime
+import re
 
 import django.utils.html
 from django.core.paginator import Paginator
@@ -21,7 +22,7 @@ from django.db.models.functions import ExtractHour
 
 from webinterface.edition_controls import can_edit
 from webinterface.forms import DiscordUserForm, DiscordGuildForm, ActionForm, ActionEditForm, WebSettingsForm, BotTaskForm
-from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings, ACTIONS_TYPES, BotTask
+from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings, ACTIONS_TYPES, BotTask, RolePersist
 
 from functools import wraps
 from django.http import HttpResponseRedirect
@@ -537,6 +538,30 @@ def api_tasks(request):
             })
 
         return JsonResponse(task_list, safe=False)
+
+
+@api_login_required
+@csrf_exempt
+def api_rolepersist(request, guild_id: int, user_id: int):
+    guild = get_object_or_404(DiscordGuild, discord_id=guild_id)
+    user = get_object_or_404(DiscordUser, discord_id=user_id)
+
+    if request.method == 'POST':
+        role_persist, created = RolePersist.objects.update_or_create(
+            guild=guild, user=user,
+            defaults={'roles_ids': request.POST.get("roles_ids", "")},
+        )
+        return JsonResponse({'status': 'ok', 'message': 'Roles stored with success', 'result': str(role_persist), 'created': created})
+    else:
+        try:
+            role_persist = RolePersist.objects.get(guild=guild, user=user).roles_ids
+        except RolePersist.DoesNotExist:
+            role_persist = ""
+        default_roles = guild.settings.rolepersist_default_roles
+
+        role_persist = ",".join(set(role_persist.split(",") + re.split(";\s\n,", default_roles)))
+
+        return JsonResponse({'status': 'ok', 'roles': role_persist})
 
 
 @api_login_required

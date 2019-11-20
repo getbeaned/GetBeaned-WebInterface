@@ -27,7 +27,7 @@ ACTIONS_TYPES = (
 # Create your models here.
 
 class DiscordUser(models.Model):
-    discord_id = models.CharField(max_length=40, primary_key=True, unique=True)
+    discord_id = models.BigIntegerField(primary_key=True, unique=True)
     discord_name = models.CharField(max_length=200)
     discord_discriminator = models.IntegerField()
     discord_avatar_url = models.URLField()
@@ -116,7 +116,7 @@ class UserSettings(models.Model):
 
 
 class DiscordGuild(models.Model):
-    discord_id = models.CharField(max_length=40, primary_key=True, unique=True)
+    discord_id = models.BigIntegerField(primary_key=True, unique=True)
     discord_name = models.CharField(max_length=200)
     discord_icon_url = models.URLField()
     discord_created_at = models.DateTimeField()
@@ -320,12 +320,6 @@ class GuildSettings(models.Model):
         help_text="Level 2 is trusted users, 3 moderators, 4 admins and 5 owner.",
         default=2)
 
-    automod_ignore_invites_in = models.CharField(
-        max_length=900,
-        verbose_name="channel id where the bot will ignore untrusted invites",
-        help_text="Set to 0 to disable ignoring invites in a channel",
-        default="0")
-
     automod_minimal_membercount_trust_server = models.IntegerField(
         verbose_name="Minimum member count to consider a server trusted",
         help_text="Set to 0 to disable trusting servers using their member count",
@@ -443,6 +437,9 @@ class GuildSettings(models.Model):
     logs_autoinspect_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log AutoInspect actions to. This is required if you want AutoInspect to work.",
                                                    default="0")
 
+    logs_rolepersist_channel_id = models.CharField(max_length=40, verbose_name="ID of the channel to log RolePersist actions to.",
+                                                   default="0")
+
     # VIP
     vip = models.BooleanField(default=False)
     vip_custom_bad_words_list = models.TextField(verbose_name="list of bad-words that should be used by AutoMod.",
@@ -451,6 +448,14 @@ class GuildSettings(models.Model):
     vip_custom_bad_regex_list = models.TextField(verbose_name="list of bad-regexes that should be used by AutoMod.",
                                                  help_text="Separate each bad-regex by a newline. You can usually type newlines using shift+enter.",
                                                  default="\\bfuck(?:ing|-off)?\\b\nnigge[ra]")
+
+    # VIP: RolePersist
+
+    rolepersist_enable = models.BooleanField(verbose_name="Enable RolePersist.",
+                                             help_text="Users Roles will be kept when people leave the server and restored when they join back. Only roles below the bot higer one will be persisted, due to permissions issues.",
+                                             default=False)
+    rolepersist_default_roles = models.TextField(verbose_name="Default role ID to give to every user joining the server.",
+                                             default="")
 
     # Bot
 
@@ -507,6 +512,23 @@ class Action(models.Model):
 
 def get_token():
     return str(uuid.uuid4().hex)
+
+
+class RolePersist(models.Model):
+    guild = models.ForeignKey(DiscordGuild, on_delete=models.CASCADE)
+    user = models.ForeignKey(DiscordUser, on_delete=models.CASCADE)
+
+    roles_ids = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('guild', 'user')
+
+    @property
+    def roles_id_list(self):
+        return self.roles_ids.split(",")
+
+    def __str__(self):
+        return f"{len(self.roles_id_list)} roles stored for {self.user} in {self.guild}"
 
 
 class BotTask(models.Model):

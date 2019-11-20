@@ -2,7 +2,7 @@ from crispy_forms.bootstrap import TabHolder, Tab, Alert
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Div, Submit, HTML
 from django.forms import ModelForm, Textarea, ModelMultipleChoiceField
-from .models import DiscordUser, DiscordGuild, Action, GuildSettings, BotTask
+from .models import DiscordUser, DiscordGuild, Action, GuildSettings, BotTask, RolePersist
 
 
 class DiscordUserForm(ModelForm):
@@ -51,7 +51,6 @@ class BotTaskForm(ModelForm):
         # include all fields you're saving from the form here
         fields = '__all__'
         exclude = ['completed']
-
 
 
 class WebSettingsForm(ModelForm):
@@ -111,7 +110,6 @@ class WebSettingsForm(ModelForm):
                             ),
                         Tab('Misc options',
                             *[Div(field_name) for field_name in ['automod_ignore_level',
-                                                                 'automod_ignore_invites_in',
                                                                  'automod_minimal_membercount_trust_server',
                                                                  'automod_note_message_deletions',
                                                                  ]]
@@ -161,6 +159,7 @@ class WebSettingsForm(ModelForm):
                                                          'logs_as_embed',
                                                          'logs_moderation_channel_id',
                                                          'logs_joins_channel_id',
+                                                         'logs_rolepersist_channel_id',
                                                          'logs_member_edits_channel_id',
                                                          'logs_edits_channel_id',
                                                          'logs_delete_channel_id',
@@ -178,7 +177,9 @@ class WebSettingsForm(ModelForm):
                     The settings you can see on this tab are only available to VIP servers. You can edit them, but you'll need a VIP server for them to work.<br/>
                     For more information about VIP servers, please see the <a href='https://docs.getbeaned.me/bot-documentation/vip-servers'>following documentation</a>
                     </div>"""),
-                    *[Div(field_name) for field_name in ['vip_custom_bad_words_list',
+                    *[Div(field_name) for field_name in ['rolepersist_enable',
+                                                         'rolepersist_default_roles',
+                                                         'vip_custom_bad_words_list',
                                                          'vip_custom_bad_regex_list',
                                                          ]],
                     HTML("""</br><div class="alert alert-warning" role="alert">

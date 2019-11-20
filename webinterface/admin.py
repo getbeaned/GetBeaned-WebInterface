@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings, UserSettings, BotTask
+from .models import DiscordUser, DiscordGuild, Action, APIAccess, GuildSettings, UserSettings, BotTask, RolePersist
 
 
 # Register your models here.
@@ -48,3 +48,4 @@ admin.site.register(Action)
 admin.site.register(GuildSettings, GuildSettingsAdmin)
 admin.site.register(APIAccess)
 admin.site.register(BotTask)
+admin.site.register(RolePersist)

@@ -44,4 +44,6 @@ urlpatterns = [
     path('api/tasks/', views.api_tasks, name="api-get-tasks"),
     path('api/tasks/<int:task_id>/complete', views.api_complete_task, name="api-complete-tasks"),
 
+    path('api/rolepersist/<int:guild_id>/<int:user_id>', views.api_rolepersist, name="api-rolepersist"),
+
 ]
