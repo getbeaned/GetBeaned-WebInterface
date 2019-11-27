@@ -553,13 +553,12 @@ def api_rolepersist(request, guild_id: int, user_id: int):
         )
         return JsonResponse({'status': 'ok', 'message': 'Roles stored with success', 'result': str(role_persist), 'created': created})
     else:
+        default_roles = guild.settings.rolepersist_default_roles
         try:
             role_persist = RolePersist.objects.get(guild=guild, user=user).roles_ids
+            role_persist = ",".join(set(role_persist.split(",") + re.split("; \n,", default_roles)))
         except RolePersist.DoesNotExist:
-            role_persist = ""
-        default_roles = guild.settings.rolepersist_default_roles
-
-        role_persist = ",".join(set(role_persist.split(",") + re.split(";\s\n,", default_roles)))
+            role_persist = ",".join(set(re.split("; \n,", default_roles)))
 
         return JsonResponse({'status': 'ok', 'roles': role_persist})
 

@@ -455,7 +455,8 @@ class GuildSettings(models.Model):
                                              help_text="Users Roles will be kept when people leave the server and restored when they join back. Only roles below the bot higer one will be persisted, due to permissions issues.",
                                              default=False)
     rolepersist_default_roles = models.TextField(verbose_name="Default role ID to give to every user joining the server.",
-                                             default="")
+                                                 default="",
+                                                 blank=True)
 
     # Bot
 
