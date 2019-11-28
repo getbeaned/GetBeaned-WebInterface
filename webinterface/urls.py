@@ -26,6 +26,7 @@ urlpatterns = [
 
     path('users',               views.web_user_list,    name='web-users-list'),
     path('users/<int:user_id>', views.web_user_details, name='web-user-details'),
+    path('users/<int:user_id>/default_pfp', views.web_user_pfp, name='web-user-default-pfp'),
     path('users/<int:guild_id>/<int:user_id>', views.web_user_details, name='web-user-details'),
 
     path('api/users/', views.api_users, name='api-users'),

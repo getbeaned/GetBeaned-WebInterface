@@ -102,6 +102,11 @@ class DiscordUser(models.Model):
 
         return index
 
+    def refresh_from_bot(self):
+        task = BotTask.objects.create(task_type="refresh_user", arguments=self.discord_id)
+        task.save()
+        return task
+
     def __str__(self):
         return f"{self.discord_name}#{self.discord_discriminator_str} ({self.discord_id})"
 

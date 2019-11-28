@@ -3,7 +3,7 @@
     <a href="{% url 'web-user-details' guild_id=action.guild.discord_id user_id=action.user.discord_id %}">
         <img class="card-img-top"
              src="{{ action.user.discord_avatar_url }}"
-             data-altSrc="{{ action.user.discord_default_avatar_url }}"
+             data-altSrc="{% url 'web-user-default-pfp' user_id=action.user.discord_id %}"
              onerror="this.src = $(this).attr('data-altSrc')"
              alt="">
     </a>

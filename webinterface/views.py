@@ -367,6 +367,13 @@ def web_user_list(request):
     return render(request, 'public/index.html')
 
 
+def web_user_pfp(request, user_id: int):
+    user = get_object_or_404(DiscordUser, discord_id=user_id)
+    user.refresh_from_bot()
+
+    return HttpResponseRedirect(user.discord_default_avatar_url)
+
+
 @vary_on_cookie
 def web_user_details(request, user_id: int, guild_id=None):
     user = get_object_or_404(DiscordUser, discord_id=user_id)
