@@ -506,7 +506,7 @@ class Action(models.Model):
     responsible_moderator = models.ForeignKey(DiscordUser, on_delete=models.DO_NOTHING, related_name='actions_given',
                                               null=True, db_index=True)
     timestamp = models.DateTimeField(default=timezone.now)
-    until = models.DateTimeField(null=True, default=None, blank=True)
+    # until = models.DateTimeField(null=True, default=None, blank=True)
     pardonned = models.BooleanField(default=False)
 
     class Meta:
