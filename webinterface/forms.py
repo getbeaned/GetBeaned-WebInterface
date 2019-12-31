@@ -88,6 +88,8 @@ class WebSettingsForm(ModelForm):
                                                                  'automod_score_embed',
                                                                  'automod_score_everyone',
                                                                  'automod_score_too_many_mentions',
+                                                                 'automod_score_multimessage_too_many_mentions',
+                                                                 'automod_score_multimessage_too_many_users_mentions',
                                                                  'automod_score_contain_invites',
                                                                  'automod_score_repeated',
                                                                  'automod_score_bad_words',
@@ -127,6 +129,7 @@ class WebSettingsForm(ModelForm):
                                     """),
                     *[Div(field_name) for field_name in ['autoinspect_enable',
                                                          'autoinspect_bypass_enable',
+                                                         'autoinspect_bitcoin_bots',
                                                          'autoinspect_pornspam_bots',
                                                          'autoinspect_username_check',
                                                          ]]

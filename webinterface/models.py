@@ -184,7 +184,8 @@ class GuildSettings(models.Model):
                            (4, 'Ban (use with caution)'))
 
     autoinspect_pornspam_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bots that come to spam porn on channels.", default=1)
-    autoinspect_username_check = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Check for bad words in users names when they join.", default=2)
+    autoinspect_bitcoin_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bitcoins bot spamming users in DMs.", default=1)
+    autoinspect_username = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Check for bad words in users names when they join.", default=2)
 
     # AutoTrigger
     autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)
@@ -291,6 +292,18 @@ class GuildSettings(models.Model):
         verbose_name="message contain too many user mentions",
         help_text="More than 3 of them",
         default=1
+    )
+
+    automod_score_multimessage_too_many_mentions = models.FloatField(
+        verbose_name="last 7 messages contain too many different user mentions",
+        help_text="More than 7 of them",
+        default=1.5
+    )
+
+    automod_score_multimessage_too_many_users_mentions = models.FloatField(
+        verbose_name="last 7 messages contain too many different user mentions",
+        help_text="More than 5 of them",
+        default=2
     )
 
     automod_score_contain_invites = models.FloatField(
