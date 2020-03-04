@@ -132,6 +132,8 @@ class WebSettingsForm(ModelForm):
                                                          'autoinspect_bitcoin_bots',
                                                          'autoinspect_pornspam_bots',
                                                          'autoinspect_username',
+                                                         'autoinspect_suspicious',
+                                                         'autoinspect_antiraid',
                                                          ]]
                     ),
                 Tab('DeHoister',

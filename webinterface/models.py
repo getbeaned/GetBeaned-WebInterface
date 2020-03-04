@@ -186,6 +186,10 @@ class GuildSettings(models.Model):
     autoinspect_pornspam_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bots that come to spam porn on channels.", default=1)
     autoinspect_bitcoin_bots = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Bitcoins bot spamming users in DMs.", default=1)
     autoinspect_username = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Check for bad words in users names when they join.", default=2)
+    autoinspect_suspicious = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="Suspicious accounts, they may not be spammers but the false positive risk is low.", default=2)
+    autoinspect_antiraid = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="AntiRaid system. Will act on multiple people when a raid is detected. "
+                                                                                      "WIP, unknown risk of false positives. "
+                                                                                      "Made to counter the Giveaway DM spam.", default=2)
 
     # AutoTrigger
     autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)
