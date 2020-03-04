@@ -474,13 +474,19 @@ class GuildSettings(models.Model):
     # VIP: RolePersist
 
     rolepersist_enable = models.BooleanField(verbose_name="Enable RolePersist.",
-                                             help_text="Users Roles will be kept when people leave the server and restored when they join back. Only roles below the bot higer one will be persisted, due to permissions issues.",
+                                             help_text="Users Roles will be kept when people leave the server and restored when they join back. "
+                                                       "Only roles below the bot higher one will be persisted, due to permissions issues.",
                                              default=False)
     rolepersist_default_roles = models.TextField(verbose_name="Default role ID to give to every user joining the server.",
                                                  default="",
                                                  blank=True)
 
     # Bot
+
+    bot_discret = models.BooleanField(verbose_name="Enable Discret Mode.",
+                                      help_text="The bot will remove the commands if they execute successfully, leaving only the bot response. "
+                                                "Please disable this if you want to report a bug.",
+                                      default=False)
 
     bot_prefix = models.CharField(
         max_length=15,
