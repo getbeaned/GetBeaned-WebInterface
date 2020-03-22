@@ -1,5 +1,5 @@
 /**
- * @license Highcharts JS v7.0.3 (2019-02-06)
+ * @license Highcharts JS v8.0.2 (2020-03-03)
  *
  * (c) 2009-2019 Torstein Honsi
  *
@@ -11,23 +11,33 @@
         factory['default'] = factory;
         module.exports = factory;
     } else if (typeof define === 'function' && define.amd) {
-        define(function () {
+        define('highcharts/themes/dark-unica', ['highcharts'], function (Highcharts) {
+            factory(Highcharts);
+            factory.Highcharts = Highcharts;
             return factory;
         });
     } else {
         factory(typeof Highcharts !== 'undefined' ? Highcharts : undefined);
     }
 }(function (Highcharts) {
-    (function (Highcharts) {
-        /**
-         * (c) 2010-2019 Torstein Honsi
+    var _modules = Highcharts ? Highcharts._modules : {};
+    function _registerModule(obj, path, args, fn) {
+        if (!obj.hasOwnProperty(path)) {
+            obj[path] = fn.apply(null, args);
+        }
+    }
+    _registerModule(_modules, 'themes/dark-unica.js', [_modules['parts/Globals.js']], function (Highcharts) {
+        /* *
          *
-         * License: www.highcharts.com/license
+         *  (c) 2010-2020 Torstein Honsi
          *
-         * Dark theme for Highcharts JS
-         * @author Torstein Honsi
-         */
-
+         *  License: www.highcharts.com/license
+         *
+         *  Dark theme for Highcharts JS
+         *
+         *  !!!!!!! SOURCE GETS TRANSPILED BY TYPESCRIPT. EDIT TS FILE ONLY. !!!!!!!
+         *
+         * */
         /* global document */
         // Load the fonts
         Highcharts.createElement('link', {
@@ -35,7 +45,6 @@
             rel: 'stylesheet',
             type: 'text/css'
         }, null, document.getElementsByTagName('head')[0]);
-
         Highcharts.theme = {
             colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066',
                 '#eeaaee', '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
@@ -78,7 +87,6 @@
                 title: {
                     style: {
                         color: '#A0A0A3'
-
                     }
                 }
             },
@@ -108,7 +116,10 @@
             plotOptions: {
                 series: {
                     dataLabels: {
-                        color: '#B0B0B3'
+                        color: '#F0F0F3',
+                        style: {
+                            fontSize: '13px'
+                        }
                     },
                     marker: {
                         lineColor: '#333'
@@ -125,6 +136,7 @@
                 }
             },
             legend: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
                 itemStyle: {
                     color: '#E0E0E3'
                 },
@@ -133,6 +145,11 @@
                 },
                 itemHiddenStyle: {
                     color: '#606063'
+                },
+                title: {
+                    style: {
+                        color: '#C0C0C0'
+                    }
                 }
             },
             credits: {
@@ -145,7 +162,6 @@
                     color: '#707073'
                 }
             },
-
             drilldown: {
                 activeAxisLabelStyle: {
                     color: '#F0F0F3'
@@ -154,7 +170,6 @@
                     color: '#F0F0F3'
                 }
             },
-
             navigation: {
                 buttonOptions: {
                     symbolStroke: '#DDDDDD',
@@ -163,7 +178,6 @@
                     }
                 }
             },
-
             // scroll charts
             rangeSelector: {
                 buttonTheme: {
@@ -198,7 +212,6 @@
                     color: 'silver'
                 }
             },
-
             navigator: {
                 handles: {
                     backgroundColor: '#666',
@@ -214,7 +227,6 @@
                     gridLineColor: '#505053'
                 }
             },
-
             scrollbar: {
                 barBackgroundColor: '#808083',
                 barBorderColor: '#808083',
@@ -224,23 +236,14 @@
                 rifleColor: '#FFF',
                 trackBackgroundColor: '#404043',
                 trackBorderColor: '#404043'
-            },
-
-            // special colors for some of the
-            legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
-            background2: '#505053',
-            dataLabelsColor: '#B0B0B3',
-            textColor: '#C0C0C0',
-            contrastTextColor: '#F0F0F3',
-            maskColor: 'rgba(255,255,255,0.3)'
+            }
         };
-
         // Apply the theme
         Highcharts.setOptions(Highcharts.theme);
 
-    }(Highcharts));
-    return (function () {
+    });
+    _registerModule(_modules, 'masters/themes/dark-unica.src.js', [], function () {
 
 
-    }());
+    });
 }));

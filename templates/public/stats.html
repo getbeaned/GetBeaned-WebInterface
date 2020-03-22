@@ -14,7 +14,7 @@
     <script src="{% static 'js/highcharts/modules/full-screen.js' %}"></script>
     <script src="{% static 'js/highcharts/modules/funnel.js' %}"></script>
     <script src="{% static 'js/highcharts/modules/draggable-points.js' %}"></script>
-    <script src="{% static 'js/highcharts/modules/highcharts-regression.js' %}"></script>
+{#    <script src="{% static 'js/highcharts/modules/highcharts-regression.js' %}"></script> #}
 
     {% if discord_logged_user and discord_logged_user.settings.theme in dark_themes %}
         <script src="{% static 'js/highcharts/dark-unica.js' %}"></script>
@@ -140,6 +140,8 @@
             }
             ]
         });
+    </script>
+    <script>
 
         Highcharts.chart('graph_servers_member_count', {
             chart: {
@@ -163,6 +165,12 @@
                         click: function (e) {
                             window.location.href = '/guilds/' + e.point.guild_id + '#' + e.point.name;
                         }
+                    },
+                    useSimulation: false,
+                    minSize: '20%',
+                    maxSize: '80%',
+                    layoutAlgorithm: {
+                        enableSimulation: false
                     },
                     dataLabels: {
                         enabled: true,
@@ -375,6 +383,7 @@
             }]
 
         });
+
         Highcharts.chart('graph_actions', {
             title: {
                 text: 'Proportion of actions by type'
