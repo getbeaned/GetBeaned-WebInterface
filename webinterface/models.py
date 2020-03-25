@@ -68,7 +68,7 @@ class DiscordUser(models.Model):
             """
             return max(0., log(x / log(x)) - 4.5)
 
-        actions = self.actions_received.order_by("id").all()
+        actions = self.actions_received.order_by("id").exclude(pardonned=True).all()
         action_mapping = {
             "softban": 5,
             "kick": 3,
