@@ -156,6 +156,16 @@ class GuildSettings(models.Model):
     guild = models.OneToOneField(DiscordGuild, on_delete=models.CASCADE, related_name='_settings', db_index=True)
     imported_bans = models.BooleanField(default=False)
 
+    invite_code = models.CharField(max_length=100,
+                                   help_text="Specify here your server invite to be sent when kicking someone, and to be shown on your server webpage",
+                                   null=True,
+                                   )
+    rules = models.TextField(max_length=1900,
+                             help_text="What are the rules of your server. Markdown accepted. Will be shown on your server webpage and sent to users when they get acted on.",
+                             null=True,
+                             blank=True,
+                             )
+
     logs_security_level = models.CharField(max_length=90,
                                            choices=(("1", "Public"),
                                                     ("2", "Not displayed on HomePage"),

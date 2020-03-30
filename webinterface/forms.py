@@ -63,6 +63,15 @@ class WebSettingsForm(ModelForm):
 
         self.helper.layout = Layout(
             TabHolder(
+                Tab('General',
+                    *[Div(field_name) for field_name in ['invite_code',
+                                                         'rules',
+                                                         'bot_prefix',
+                                                         'bot_discret',
+                                                         'force_justification_level',
+                                                         'logs_security_level',
+                                                         ]]
+                    ),
                 Tab('Automod',
                     TabHolder(
                         Tab('Required totals to act',
@@ -169,13 +178,6 @@ class WebSettingsForm(ModelForm):
                                                          'logs_edits_channel_id',
                                                          'logs_delete_channel_id',
                                                          'logs_autoinspect_channel_id',
-                                                         ]]
-                    ),
-                Tab('Misc',
-                    *[Div(field_name) for field_name in ['bot_prefix',
-                                                         'bot_discret',
-                                                         'logs_security_level',
-                                                         'force_justification_level'
                                                          ]]
                     ),
                 Tab('VIP Settings',

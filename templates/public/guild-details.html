@@ -42,102 +42,131 @@
         <a href="{{ guild.settings.admin_url }}">this guild settings here</a>
     {% endif %}
 
+    <br/>
     <h2>Guild details</h2>
-    <table class="table">
-        <tbody>
-        <tr>
-            <td>Discord ID:</td>
-            <td>{{ guild.discord_id }} <i class="far fa-copy"
-                                          data-toggle="tooltip"
-                                          data-placement="auto"
-                                          title="Copy the ID to your clipboard"
-                                          onclick="copyTextToClipboard('{{ guild.discord_id }}');
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td>Discord ID:</td>
+                    <td>{{ guild.discord_id }} <i class="far fa-copy"
+                                                  data-toggle="tooltip"
+                                                  data-placement="auto"
+                                                  title="Copy the ID to your clipboard"
+                                                  onclick="copyTextToClipboard('{{ guild.discord_id }}');
 
-                                                  $(this).attr('title', 'Copied!')
-                                                  .tooltip('_fixTitle')
-                                                  .tooltip('show')
-                                                  .attr('title', 'Copy the ID to your clipboard')
-                                                  .tooltip('_fixTitle');">
-            </i>
-            </td>
-        </tr>
-        <tr>
-            <td>Owner</td>
-            <td><a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=guild.owner_id %}">{{ guild.owner }}</a> <i class="far fa-copy"
-                                                                                                                                 data-toggle="tooltip"
-                                                                                                                                 data-placement="auto"
-                                                                                                                                 title="Copy the ID to your clipboard"
-                                                                                                                                 onclick="copyTextToClipboard('{{ guild.owner_id }}');
+                                                          $(this).attr('title', 'Copied!')
+                                                          .tooltip('_fixTitle')
+                                                          .tooltip('show')
+                                                          .attr('title', 'Copy the ID to your clipboard')
+                                                          .tooltip('_fixTitle');">
+                    </i>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Owner</td>
+                    <td><a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=guild.owner_id %}">{{ guild.owner }}</a> <i class="far fa-copy"
+                                                                                                                                         data-toggle="tooltip"
+                                                                                                                                         data-placement="auto"
+                                                                                                                                         title="Copy the ID to your clipboard"
+                                                                                                                                         onclick="copyTextToClipboard('{{ guild.owner_id }}');
 
-                                                                                                                                         $(this).attr('title', 'Copied!')
-                                                                                                                                         .tooltip('_fixTitle')
-                                                                                                                                         .tooltip('show')
-                                                                                                                                         .attr('title', 'Copy the ID to your clipboard')
-                                                                                                                                         .tooltip('_fixTitle');">
-            </i></td>
-        </tr>
-        <tr>
-            <td>Created At</td>
-            <td>{{ guild.discord_created_at }}</td>
-        </tr>
-        <tr>
-            <td>Users</td>
-            <td>{{ guild.discord_user_count }}</td>
-        </tr>
-        <tr>
-            <td>VIP</td>
-            <td>{{ guild.settings.vip }}</td>
-        </tr>
-        <tr>
-            <td>Automod Enabled</td>
-            <td>{% if guild.settings.automod_enable %}
-                    <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=1 %}">Yes</a>
-                {% else %}
-                    No
-                {% endif %}</td>
-        </tr>
-        <tr>
-            <td>AutoTriggers Enabled</td>
-            <td>
-                {% if guild.settings.autotrigger_enable %}
-                    <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=1 %}">Yes</a>
-                {% else %}
-                    No
+                                                                                                                                                 $(this).attr('title', 'Copied!')
+                                                                                                                                                 .tooltip('_fixTitle')
+                                                                                                                                                 .tooltip('show')
+                                                                                                                                                 .attr('title', 'Copy the ID to your clipboard')
+                                                                                                                                                 .tooltip('_fixTitle');">
+                    </i></td>
+                </tr>
+                <tr>
+                    <td>Created At</td>
+                    <td>{{ guild.discord_created_at }}</td>
+                </tr>
+                <tr>
+                    <td>Users</td>
+                    <td>{{ guild.discord_user_count }}</td>
+                </tr>
+                <tr>
+                    <td>VIP</td>
+                    <td>{{ guild.settings.vip }}</td>
+                </tr>
+                <tr>
+                    <td>Automod Enabled</td>
+                    <td>{% if guild.settings.automod_enable %}
+                        <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=1 %}">Yes</a>
+                    {% else %}
+                        No
+                    {% endif %}</td>
+                </tr>
+                <tr>
+                    <td>AutoTriggers Enabled</td>
+                    <td>
+                        {% if guild.settings.autotrigger_enable %}
+                            <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=1 %}">Yes</a>
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>AutoInspect Enabled</td>
+                    <td>
+                        {% if guild.settings.autoinspect_enable %}
+                            <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=4 %}">Yes</a>
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Thresholds Enabled</td>
+                    <td>
+                        {% if guild.settings.thresholds_enable %}
+                            <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=2 %}">Yes</a>
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>DeHoister Enabled</td>
+                    <td>
+                        {% if guild.settings.dehoist_enable %}
+                            <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=3 %}">Yes</a>
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if guild.settings.invite_code %}
+                    <tr>
+                        <td>Invite code</td>
+                        <td>
+                            <a href="{{ guild.settings.invite_code }}">{{ guild.settings.invite_code }}</a>
+                        </td>
+                    </tr>
                 {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>AutoInspect Enabled</td>
-            <td>
-                {% if guild.settings.autoinspect_enable %}
-                    <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=4 %}">Yes</a>
-                {% else %}
-                    No
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>Thresholds Enabled</td>
-            <td>
-                {% if guild.settings.thresholds_enable %}
-                    <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=2 %}">Yes</a>
-                {% else %}
-                    No
-                {% endif %}
-            </td>
-        </tr>
-        <tr>
-            <td>DeHoister Enabled</td>
-            <td>
-                {% if guild.settings.dehoist_enable %}
-                    <a href="{% url 'web-user-details' guild_id=guild.discord_id user_id=3 %}">Yes</a>
-                {% else %}
-                    No
-                {% endif %}
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-lg-6">
+            <iframe src="https://discordapp.com/widget?id={{ guild.discord_id }}&theme=dark"
+                    width="100%"
+                    height="100%"
+                    allowtransparency="true"
+                    frameborder="0"></iframe>
+        </div>
+    </div>
+    {% if guild.settings.rules %}
+        <h2>Server rules</h2>
+        <pre>
+            {{ guild.settings.rules }}
+        </pre>
+    {% endif %}
+    <br/>
+
 
     <h2>Actions recorded on this server</h2>
     {% if actions %}
