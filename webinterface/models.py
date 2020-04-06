@@ -158,6 +158,7 @@ class GuildSettings(models.Model):
 
     invite_code = models.CharField(max_length=100,
                                    help_text="Specify here your server invite to be sent when kicking someone, and to be shown on your server webpage",
+                                   blank=True,
                                    null=True,
                                    )
     rules = models.TextField(max_length=1900,
