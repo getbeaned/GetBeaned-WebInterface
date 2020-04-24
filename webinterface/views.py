@@ -6,7 +6,7 @@ import django.utils.html
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.utils import timezone
-
+from ratelimit.decorators import ratelimit
 from django.views.decorators.cache import cache_page
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
@@ -65,7 +65,7 @@ def web_index(request):
         "thresholds_enabled_count": GuildSettings.objects.filter(thresholds_enable=True).count(),
     }
 
-    latest_action = Action.objects.filter(guild___settings__logs_security_level="1").latest(field_name="id")
+    latest_action = Action.objects.filter(guild___settings__logs_security_level="1").latest("id")
 
     # latest_actions = Action.objects.order_by('-id')[:4]
     latest_actions = [latest_action, Action.objects.get(id=1319), Action.objects.get(id=1286), Action.objects.get(id=1143)]
@@ -193,7 +193,7 @@ def web_guild_list(request):
     return render(request, 'public/index.html')
 
 
-def can_access_actions(guild, logged_in_user=None, return_list=False, specific_action:Action=None):
+def can_access_actions(guild, logged_in_user=None, return_list=False, specific_action: Action = None):
     logs_security_level = int(guild.settings.logs_security_level)
     if logs_security_level in [1, 2]:
         if return_list:
@@ -243,7 +243,7 @@ def can_access_actions(guild, logged_in_user=None, return_list=False, specific_a
                 else:
                     if specific_action:
                         return specific_action.responsible_moderator.discord_id == logged_user_id or \
-                                specific_action.user.discord_id == logged_user_id
+                               specific_action.user.discord_id == logged_user_id
                     return False
 
 
@@ -367,6 +367,7 @@ def web_user_list(request):
     return render(request, 'public/index.html')
 
 
+@ratelimit(key='ip', rate='5/m', block=True)
 def web_user_pfp(request, user_id: int):
     user = get_object_or_404(DiscordUser, discord_id=user_id)
     user.refresh_from_bot()
@@ -522,7 +523,6 @@ def api_actions(request):
 @api_login_required
 @csrf_exempt
 def api_tasks(request):
-
     if request.method == 'POST':
         form = BotTaskForm(request.POST)
 

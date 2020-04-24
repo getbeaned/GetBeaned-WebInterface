@@ -205,6 +205,18 @@ class GuildSettings(models.Model):
     # AutoTrigger
     autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)
 
+    autotrigger_libradiscordbots_score = models.FloatField(
+        verbose_name="message looks like a ad for a fake libra cryptocurrency from \"facebook\" ",
+        help_text="Set to 0 to disable",
+        default=10
+    )
+
+    autotrigger_badstrings_score = models.FloatField(
+        verbose_name="message contains strings that may crash some types of phones/computers ",
+        help_text="Set to 0 to disable",
+        default=10
+    )
+
     autotrigger_sexdatingdiscordbots_score = models.FloatField(
         verbose_name="message looks like a link spam for a \"Sex Dating\" scam website ",
         help_text="Set to 0 to disable",
