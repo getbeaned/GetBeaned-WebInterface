@@ -506,7 +506,7 @@ class GuildSettings(models.Model):
 
     # Bot
 
-    bot_discret = models.BooleanField(verbose_name="Enable Discret Mode.",
+    bot_discret = models.BooleanField(verbose_name="Enable Discreet Mode.",
                                       help_text="The bot will remove the commands if they execute successfully, leaving only the bot response. "
                                                 "Please disable this if you want to report a bug.",
                                       default=False)
