@@ -15,6 +15,8 @@ def can_edit(who, what):
             return False
     elif isinstance(who, User):
         try:
+            if who.is_staff:
+                return True
             who = DiscordUser.objects.get(discord_id=int(who.socialaccount_set.all()[0].uid))
         except:
             return False

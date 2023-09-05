@@ -1,5 +1,3 @@
-from django.urls import path
-from django.conf.urls import url
 from django.urls import (path, include)
 
 from . import views
@@ -46,5 +44,6 @@ urlpatterns = [
     path('api/tasks/<int:task_id>/complete', views.api_complete_task, name="api-complete-tasks"),
 
     path('api/rolepersist/<int:guild_id>/<int:user_id>', views.api_rolepersist, name="api-rolepersist"),
+    path('robots.txt', views.robotstxt, name="robotstxt"),
 
 ]

@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.discord',
 
     'webinterface.apps.WebinterfaceConfig',
-    'bootstrap4',
+    'crispy_bootstrap4',
     'debug_toolbar',
     'crispy_forms',
     'cachalot',
@@ -217,7 +217,7 @@ LOGGING = {
         'logfile': {
             'level':'INFO',
             'class':'logging.FileHandler',
-            'filename': BASE_DIR + "/../getbeaned.log",
+            'filename': BASE_DIR + "/getbeaned.log",
         },
     },
     'root': {
@@ -243,7 +243,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 
 def show_toolbar(request):
-    return not request.is_ajax() and request.user and request.user.username == "Eyesofcreeper"
+    return False and request.user and request.user.username == "Eyesofcreeper"
 
 
 DEBUG_TOOLBAR_PANELS = [

@@ -189,6 +189,11 @@ class GuildSettings(models.Model):
                                                     help_text="AutoInspect won't act on a user again if it acted on it in the last 10 minutes. "
                                                               "This allow users to join the server in case of false positives by re-joining.", default=True)
 
+    autoinspect_massjoins = models.BooleanField(verbose_name="enable detection Mass Joins",
+                                                help_text="AutoInspect fires when more than 15 users join in a very short time (1 minute).",
+                                                default=False)
+
+
     AUTOINSPECT_ACTIONS = ((1, 'Do Nothing'),
                            (2, 'Warn admins'),
                            (3, 'Kick and delete messages (Softban - use with caution)'),
@@ -201,6 +206,8 @@ class GuildSettings(models.Model):
     autoinspect_antiraid = models.IntegerField(choices=AUTOINSPECT_ACTIONS, help_text="AntiRaid system. Will act on multiple people when a raid is detected. "
                                                                                       "WIP, unknown risk of false positives. "
                                                                                       "Made to counter the Giveaway DM spam.", default=2)
+
+
 
     # AutoTrigger
     autotrigger_enable = models.BooleanField(verbose_name="enable AutoTriggers", default=False)

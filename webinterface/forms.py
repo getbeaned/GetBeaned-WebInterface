@@ -140,6 +140,7 @@ class WebSettingsForm(ModelForm):
                                     """),
                     *[Div(field_name) for field_name in ['autoinspect_enable',
                                                          'autoinspect_bypass_enable',
+                                                         'autoinspect_massjoins',
                                                          'autoinspect_bitcoin_bots',
                                                          'autoinspect_pornspam_bots',
                                                          'autoinspect_username',

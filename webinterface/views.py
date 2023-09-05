@@ -6,12 +6,11 @@ import django.utils.html
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.utils import timezone
-from ratelimit.decorators import ratelimit
 from django.views.decorators.cache import cache_page
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponseForbidden, HttpResponse
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -367,7 +366,6 @@ def web_user_list(request):
     return render(request, 'public/index.html')
 
 
-@ratelimit(key='ip', rate='5/m', block=True)
 def web_user_pfp(request, user_id: int):
     user = get_object_or_404(DiscordUser, discord_id=user_id)
     user.refresh_from_bot()
@@ -579,3 +577,19 @@ def api_complete_task(request, task_id):
     task.save()
 
     return JsonResponse({"ok": True})
+
+def robotstxt(request):
+    return HttpResponse("""
+    User-agent: Baiduspider
+    User-agent: 360Spider
+    User-agent: Yisouspider
+    User-agent: PetalBot
+    User-agent: Bytespider
+    User-agent: Sogou web spider
+    User-agent: Sogou inst spider
+    Disallow: /
+    
+    User-agent: *
+    Disallow: /admin/
+    Disallow: /users/*/default_pfp
+    """, content_type="text/plain")
