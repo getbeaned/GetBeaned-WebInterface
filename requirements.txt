@@ -10,3 +10,4 @@ django-crispy-forms
 django-cachalot
 django-analytical
 django-ratelimit
+colorlog

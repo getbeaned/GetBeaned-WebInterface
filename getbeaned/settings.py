@@ -206,25 +206,101 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
 
 # Logging
+
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "()": "colorlog.ColoredFormatter",
+            "format": "{log_color}{levelname}\t {asctime}\t [{name}]{reset} {message}",
+            "style": "{",
         },
-        'logfile': {
-            'level':'INFO',
-            'class':'logging.FileHandler',
-            'filename': BASE_DIR + "/getbeaned.log",
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
         },
     },
-    'root': {
-        'level': 'DEBUG',
-        'handlers': ['console', 'logfile']
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            # "class": "django.utils.log.AdminEmailHandler",
+            "class": "logging.NullHandler",
+            # "include_html": True,
+        },
+    },
+    "root": {
+        "handlers": ["console", "mail_admins"],
+        "level": "DEBUG",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "discord": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "asyncio": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "parso.*": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "paramiko.transport": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "urllib3.connectionpool": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "PIL.*": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "MARKDOWN": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "parso.python.diff": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "fontTools": {
+            "handlers": ["console", "mail_admins"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "fontTools.subset": {
+            "handlers": ["console", "mail_admins"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "weasyprint": {
+            "handlers": ["console", "mail_admins"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
     },
 }
+
 
 CACHES = {
     'default': {
